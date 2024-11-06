@@ -1,5 +1,8 @@
+import aplicacao.ACMEAirDrones;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        ACMEAirDrones acmeAirDrones = new ACMEAirDrones();
+        acmeAirDrones.executar();
     }
 }
