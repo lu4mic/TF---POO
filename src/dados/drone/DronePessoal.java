@@ -10,7 +10,6 @@ public class DronePessoal extends Drone{
 
     @Override
     public double calculaCustoKm() {
-        //IMPLEMENTAR
-        return 0;
+        return getCustoFixo() + 2;
     }
 }

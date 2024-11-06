@@ -11,5 +11,9 @@ public abstract class Drone {
         this.autonomia = autonomia;
     }
 
+    public double getCustoFixo() {
+        return custoFixo;
+    }
+
     public abstract double calculaCustoKm();
 }

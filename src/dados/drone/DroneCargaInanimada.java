@@ -10,7 +10,9 @@ public class DroneCargaInanimada extends DroneCarga{
 
     @Override
     public double calculaCustoKm() {
-        //IMPLEMENTAR
-        return 0;
+        if(protecao){
+            return getCustoFixo()  + 10;
+        }
+        return getCustoFixo()  + 5;
     }
 }
