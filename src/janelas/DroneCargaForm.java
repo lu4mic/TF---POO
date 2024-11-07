@@ -10,6 +10,7 @@ public class DroneCargaForm extends JFrame {
     private JFormattedTextField textoPesoMax;
     private JCheckBox protecaoCheckBox;
     private JCheckBox climatizacaoCheckBox;
+    private JButton botaoEnviar;
 
     public DroneCargaForm() {
         setTitle("Carga Form");
