@@ -7,7 +7,7 @@ public class DroneCargaViva extends DroneCarga {
         super(codigo, custoFixo, autonomia, pesoMaximo);
         this.climatizado = climatizado;
     }
-    
+
     @Override
     public double calculaCustoKm() {
         if(climatizado){

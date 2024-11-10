@@ -11,6 +11,14 @@ public abstract class Drone {
         this.autonomia = autonomia;
     }
 
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public double getAutonomia() {
+        return autonomia;
+    }
+
     public double getCustoFixo() {
         return custoFixo;
     }
