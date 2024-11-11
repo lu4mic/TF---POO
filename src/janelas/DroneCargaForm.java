@@ -52,7 +52,6 @@ public class DroneCargaForm extends JFrame {
                     } else if (!cargaViva && climatizacao) {
                         textoErro.setText("A carga inanimada não deve ter climatização");
                     } else {
-                        ACMEAirDrones acmeAirDrones = new ACMEAirDrones();
                         if (!acmeAirDrones.CadastraDrone(codigo, autonomia, custoFixo, pesoMax, protecao, climatizacao, cargaViva)) {
                             textoErro.setText("Esse código já existe!");
                         } else {
