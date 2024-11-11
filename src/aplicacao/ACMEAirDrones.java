@@ -8,7 +8,7 @@ import java.util.Comparator;
 
 
 public class ACMEAirDrones {
-    private DronesLista listaD = new DronesLista();;
+    private DronesLista listaD = new DronesLista();
 
     public ACMEAirDrones() {
     }
@@ -44,9 +44,9 @@ public class ACMEAirDrones {
 
         listaD.getListaDrones().sort(Comparator.comparingInt(Drone::getCodigo));
 
-        for (int i = 0; i < listaD.getListaDrones().size(); i++) {            //PRINTANDO LISTA PARA TESTAR SE FUNCIONA
-            System.out.println(listaD.getListaDrones().get(i).getCodigo());
-        }
         return true;
+    }
+    public void mostrarDronesCarga(){
+
     }
 }
