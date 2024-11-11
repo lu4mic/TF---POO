@@ -105,15 +105,7 @@ public class DroneCargaForm extends JFrame {
         buttonMostrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textoErro.setText("");
-                if(listaDrones.getListaDrones().isEmpty()){
-                    textoErro.setText("Voce ainda nao cadastrou nenhum drone de carga!");
-                }
-                for(Drone d : listaDrones.getListaDrones()){
-                    if(d instanceof DroneCarga){
-                        textoErro.setText(d.toString());
-                    }
-                }
+                textoErro.setText(acmeAirDrones.mostrarDronesCarga());
             }
         });
     }

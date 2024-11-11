@@ -46,7 +46,16 @@ public class ACMEAirDrones {
 
         return true;
     }
-    public void mostrarDronesCarga(){
-
+    public String mostrarDronesCarga(){
+        StringBuilder texto = new StringBuilder();
+        if(listaD.getListaDrones().isEmpty()){
+            return "Voce nao tem nenhum Drone de carga cadastrado!";
+        }
+        for(Drone d : listaD.getListaDrones()){
+            if(d instanceof DroneCarga){
+                texto.append(d+"\n");
+            }
+        }
+        return texto.toString();
     }
 }
