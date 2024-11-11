@@ -1,6 +1,9 @@
 package janelas;
 
 import aplicacao.ACMEAirDrones;
+import dados.drone.Drone;
+import dados.drone.DroneCarga;
+import dados.drone.DronesLista;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -8,6 +11,7 @@ import java.awt.event.ActionListener;
 
 public class DroneCargaForm extends JFrame {
     private final ACMEAirDrones acmeAirDrones = new ACMEAirDrones();
+    private DronesLista listaDrones;
     private JPanel painelPrincipal;
     private JCheckBox cargaVivaCheckBox;
     private JFormattedTextField textoAutonomia;
@@ -19,6 +23,9 @@ public class DroneCargaForm extends JFrame {
     private JLabel textoErro;
     private JFormattedTextField textoCodigo;
     private JButton limparButton;
+    private JButton terminarButton;
+    private JScrollPane textoErroCaixa;
+    private JButton buttonMostrar;
 
     public DroneCargaForm() {
         setTitle("Carga Form");
@@ -27,7 +34,6 @@ public class DroneCargaForm extends JFrame {
         setSize(720, 480);
         setVisible(true);
         climatizacaoCheckBox.setVisible(false);
-
 
         botaoEnviar.addActionListener(new ActionListener() {
             @Override
@@ -88,6 +94,26 @@ public class DroneCargaForm extends JFrame {
                 textoPesoMax.setText("");
                 textoCodigo.setText("");
                 textoAutonomia.setText("");
+            }
+        });
+        terminarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        buttonMostrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textoErro.setText("");
+                if(listaDrones.getListaDrones().isEmpty()){
+                    textoErro.setText("Voce ainda nao cadastrou nenhum drone de carga!");
+                }
+                for(Drone d : listaDrones.getListaDrones()){
+                    if(d instanceof DroneCarga){
+                        textoErro.setText(d.toString());
+                    }
+                }
             }
         });
     }
