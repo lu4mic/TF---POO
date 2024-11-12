@@ -44,6 +44,7 @@ public class ACMEAirDrones {
         if(listaD.getListaDrones().isEmpty()){
             return "Voce nao tem nenhum Drone de carga cadastrado!";
         }
+        texto.append("codigo - autonomia - custoFixo - pesoMax\n");
         for(Drone d : listaD.getListaDrones()){
             if(d instanceof DroneCarga){
                 texto.append(d + "\n");

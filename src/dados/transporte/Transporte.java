@@ -36,13 +36,6 @@ public abstract class Transporte {
         PENDENTE, ALOCADO, TERMINADO, CANCELADO
     }
 
-    public void setSituacao(Estado situacao) {
-        this.situacao = situacao;
-    }
-    public Estado getSituacao() {
-        return situacao;
-    }
-
     public Drone getDrone() {
         return drone;
     }
