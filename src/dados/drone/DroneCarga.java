@@ -8,6 +8,6 @@ public abstract class DroneCarga extends Drone{
         this.pesoMaximo = pesoMaximo;
     }
     public String toString(){
-        return super.toString() + " - "+pesoMaximo;
+        return super.toString() + " - " + pesoMaximo;
     }
 }

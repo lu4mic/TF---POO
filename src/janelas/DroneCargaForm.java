@@ -1,8 +1,6 @@
 package janelas;
 
 import aplicacao.ACMEAirDrones;
-import dados.drone.Drone;
-import dados.drone.DroneCarga;
 import dados.drone.DronesLista;
 
 import javax.swing.*;
@@ -20,12 +18,12 @@ public class DroneCargaForm extends JFrame {
     private JCheckBox protecaoCheckBox;
     private JCheckBox climatizacaoCheckBox;
     private JButton botaoEnviar;
-    private JLabel textoErro;
     private JFormattedTextField textoCodigo;
     private JButton limparButton;
     private JButton terminarButton;
     private JScrollPane textoErroCaixa;
     private JButton buttonMostrar;
+    private JTextArea textoErro1;
 
     public DroneCargaForm() {
         setTitle("Carga Form");
@@ -35,14 +33,15 @@ public class DroneCargaForm extends JFrame {
         setVisible(true);
         climatizacaoCheckBox.setVisible(false);
 
+
         botaoEnviar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textoErro.setText("");
+                textoErro1.setText("");
 
                 if (textoAutonomia.getText().isBlank() || textoCustoFixo.getText().isBlank() ||
                         textoPesoMax.getText().isBlank() || textoCodigo.getText().isBlank()) {
-                    textoErro.setText("Todos os campos devem ser preenchidos!");
+                    textoErro1.setText("Todos os campos devem ser preenchidos!");
                     return;
                 }
 
@@ -56,18 +55,18 @@ public class DroneCargaForm extends JFrame {
                     boolean cargaViva = cargaVivaCheckBox.isSelected();
 
                     if (cargaViva && protecao) {
-                        textoErro.setText("A carga viva não deve ter proteção");
+                        textoErro1.setText("A carga viva não deve ter proteção");
                     } else if (!cargaViva && climatizacao) {
-                        textoErro.setText("A carga inanimada não deve ter climatização");
+                        textoErro1.setText("A carga inanimada não deve ter climatização");
                     } else {
                         if (!acmeAirDrones.CadastraDrone(codigo, autonomia, custoFixo, pesoMax, protecao, climatizacao, cargaViva)) {
-                            textoErro.setText("Esse código já existe!");
+                            textoErro1.setText("Esse código já existe!");
                         } else {
-                            textoErro.setText("Drone cadastrado com sucesso!");
+                            textoErro1.setText("Drone cadastrado com sucesso!");
                         }
                     }
                 } catch (NumberFormatException ex) {
-                    textoErro.setText("Os campos devem ser preenchidos com números. Utilize . para as casas decimais");
+                    textoErro1.setText("Os campos devem ser preenchidos com números. Utilize . para as casas decimais");
                 }
             }
         });
@@ -77,10 +76,12 @@ public class DroneCargaForm extends JFrame {
                 if(!cargaVivaCheckBox.isSelected()) {
                     climatizacaoCheckBox.setVisible(false);
                     protecaoCheckBox.setVisible(true);
+                    climatizacaoCheckBox.setSelected(false);
                 }
                 else{
                     climatizacaoCheckBox.setVisible(true);
                     protecaoCheckBox.setVisible(false);
+                    protecaoCheckBox.setSelected(false);
                 }
             }
         });
@@ -105,7 +106,7 @@ public class DroneCargaForm extends JFrame {
         buttonMostrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textoErro.setText(acmeAirDrones.mostrarDronesCarga());
+                textoErro1.setText(acmeAirDrones.mostrarDronesCarga());
             }
         });
     }

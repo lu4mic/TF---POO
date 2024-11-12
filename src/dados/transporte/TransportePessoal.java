@@ -12,11 +12,13 @@ public class TransportePessoal extends Transporte {
         super(numero, nomeCliente, descricao, peso, latitudeOrigem, longitudeOrigem, latitudeDestino, longitudeDestino,
                 situacao, drone);
         this.qtdPessoas = qtdPessoas;
+
     }
 
     @Override
     public double calculaCusto() {
-        double distancia = 0; //FAZER CALCULO DISTANCIA
-        return (getDrone().calculaCustoKm() * distancia) + 10;
+        double distancia = super.getDistancia();
+        return (getDrone().calculaCustoKm() * distancia) + 10 * qtdPessoas;
     }
+
 }

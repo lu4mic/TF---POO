@@ -15,13 +15,6 @@ public class ACMEAirDrones {
 
     public void executar(){
         DroneCargaForm form = new DroneCargaForm();
-
-//      CadastraDrone(1,1,1,1,false,false,false);
-//      CadastraDrone(5,2,2,2,false,false,false);
-//       CadastraDrone(3,3,3,3,false,false,false);
-//       if(!CadastraDrone(1,3,3,3,false,false,false)){
-//           System.out.println("Erro");
-//       }
     }
 
     public boolean CadastraDrone(int codigo ,double autonomia , double custoFixo , double pesoMax , boolean protecao , boolean climatizacao , boolean cargaViva){
