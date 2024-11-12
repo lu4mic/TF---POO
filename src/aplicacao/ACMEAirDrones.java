@@ -2,6 +2,7 @@ package aplicacao;
 
 import dados.drone.*;
 import janelas.DroneCargaForm;
+import janelas.PainelPrincipal;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -14,7 +15,7 @@ public class ACMEAirDrones {
     }
 
     public void executar(){
-        DroneCargaForm form = new DroneCargaForm();
+        PainelPrincipal form = new PainelPrincipal();
     }
 
     public boolean CadastraDrone(int codigo ,double autonomia , double custoFixo , double pesoMax , boolean protecao , boolean climatizacao , boolean cargaViva){

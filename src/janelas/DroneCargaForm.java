@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 public class DroneCargaForm extends JFrame {
     private final ACMEAirDrones acmeAirDrones = new ACMEAirDrones();
     private DronesLista listaDrones;
-    private JPanel painelPrincipal;
+    private JPanel painelDroneCarga;
     private JCheckBox cargaVivaCheckBox;
     private JFormattedTextField textoAutonomia;
     private JFormattedTextField textoCustoFixo;
@@ -27,7 +27,7 @@ public class DroneCargaForm extends JFrame {
 
     public DroneCargaForm() {
         setTitle("Carga Form");
-        setContentPane(painelPrincipal);
+        setContentPane(painelDroneCarga);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(720, 480);
         setVisible(true);
