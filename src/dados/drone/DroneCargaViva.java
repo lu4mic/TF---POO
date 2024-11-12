@@ -15,4 +15,8 @@ public class DroneCargaViva extends DroneCarga {
         }
         return getCustoFixo() + 10;
     }
+
+    public String toString(){
+        return super.toString() + " Climatizado: " + climatizado;
+    }
 }

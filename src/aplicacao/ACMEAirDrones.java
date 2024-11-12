@@ -53,7 +53,7 @@ public class ACMEAirDrones {
         }
         for(Drone d : listaD.getListaDrones()){
             if(d instanceof DroneCarga){
-                texto.append(d+"\n");
+                texto.append(d + "\n");
             }
         }
         return texto.toString();
