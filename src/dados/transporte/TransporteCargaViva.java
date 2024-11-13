@@ -22,7 +22,6 @@ public class TransporteCargaViva extends Transporte {
         if(temperaturaMaxima - temperaturaMinima > 10) {
             return (getDrone().getCustoFixo() * distancia) + 1000;
         }
-
         return getDrone().getCustoFixo() * distancia;
     }
 }

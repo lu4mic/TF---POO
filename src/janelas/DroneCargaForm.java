@@ -30,7 +30,6 @@ public class DroneCargaForm extends JFrame {
         setContentPane(painelDroneCarga);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(720, 480);
-        setVisible(true);
         climatizacaoCheckBox.setVisible(false);
 
 

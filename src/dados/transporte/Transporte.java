@@ -55,6 +55,6 @@ public abstract class Transporte {
         a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(latO) * Math.cos(latD) * Math.pow(Math.sin(dlon / 2), 2);
         distancia = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        return 6378140 * distancia; // Retorna a distância em metros
+        return (6378140 * distancia) / 1000; // Retorna a distância em metros
     }
 }
