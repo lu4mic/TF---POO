@@ -2,6 +2,7 @@ package aplicacao;
 
 import dados.drone.*;
 import janelas.DroneCargaForm;
+import janelas.PainelPrincipal;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -14,14 +15,7 @@ public class ACMEAirDrones {
     }
 
     public void executar(){
-        DroneCargaForm form = new DroneCargaForm();
-
-//      CadastraDrone(1,1,1,1,false,false,false);
-//      CadastraDrone(5,2,2,2,false,false,false);
-//       CadastraDrone(3,3,3,3,false,false,false);
-//       if(!CadastraDrone(1,3,3,3,false,false,false)){
-//           System.out.println("Erro");
-//       }
+        PainelPrincipal form = new PainelPrincipal();
     }
 
     public boolean CadastraDrone(int codigo ,double autonomia , double custoFixo , double pesoMax , boolean protecao , boolean climatizacao , boolean cargaViva){
@@ -51,6 +45,7 @@ public class ACMEAirDrones {
         if(listaD.getListaDrones().isEmpty()){
             return "Voce nao tem nenhum Drone de carga cadastrado!";
         }
+        texto.append("codigo - autonomia - custoFixo - pesoMax\n");
         for(Drone d : listaD.getListaDrones()){
             if(d instanceof DroneCarga){
                 texto.append(d + "\n");

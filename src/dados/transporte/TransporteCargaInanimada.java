@@ -16,7 +16,7 @@ public class TransporteCargaInanimada extends Transporte {
 
     @Override
     public double calculaCusto() {
-        double distancia = 0; //fazer calculo
+        double distancia = super.getDistancia();
         if(cargaPerigosa) {
             return (getDrone().getCustoFixo() * distancia) + 500;
         }
