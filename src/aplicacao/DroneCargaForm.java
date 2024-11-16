@@ -1,15 +1,10 @@
-package janelas;
-
-import aplicacao.ACMEAirDrones;
-import dados.drone.DronesLista;
+package aplicacao;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DroneCargaForm extends JFrame {
-    private final ACMEAirDrones acmeAirDrones = new ACMEAirDrones();
-    private DronesLista listaDrones;
+public class DroneCargaForm extends JPanel{
     private JPanel painelDroneCarga;
     private JCheckBox cargaVivaCheckBox;
     private JFormattedTextField textoAutonomia;
@@ -25,13 +20,8 @@ public class DroneCargaForm extends JFrame {
     private JButton buttonMostrar;
     private JTextArea textoErro1;
 
-    public DroneCargaForm() {
-        setTitle("Carga Form");
-        setContentPane(painelDroneCarga);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(720, 480);
-        climatizacaoCheckBox.setVisible(false);
-
+    public DroneCargaForm(ACMEAirDrones acmeAirDrones) {
+        add(painelDroneCarga);
 
         botaoEnviar.addActionListener(new ActionListener() {
             @Override
@@ -94,12 +84,13 @@ public class DroneCargaForm extends JFrame {
                 textoPesoMax.setText("");
                 textoCodigo.setText("");
                 textoAutonomia.setText("");
+                textoErro1.setText("");
             }
         });
-        terminarButton.addActionListener(new ActionListener() {
+        terminarButton.addActionListener(new ActionListener() {  //voltar pro painel principal
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                acmeAirDrones.mudaPainel(1);
             }
         });
         buttonMostrar.addActionListener(new ActionListener() {
