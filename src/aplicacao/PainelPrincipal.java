@@ -20,10 +20,26 @@ public class PainelPrincipal extends JPanel {
     public PainelPrincipal(ACMEAirDrones acmeAirDrones) {
         this.add(painelMenu);
 
-        botaoCadastrarDrone.addActionListener(new ActionListener() {  //Botão de criar drone carga
+        botaoCadastrarDrone.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                acmeAirDrones.mudaPainel(2);
+                String[] options = {"Drone de Carga", "Drone Pessoal", "Voltar"};
+                int choice = JOptionPane.showOptionDialog(
+                        null,
+                        "Escolha o tipo de drone que deseja cadastrar:",
+                        "Cadastrar Drone",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        options,
+                        options[0]
+                );
+
+                if (choice == 0) { // Drone de Carga
+                    acmeAirDrones.mudaPainel(2);
+                } else if (choice == 1) { // Drone Pessoal
+                    JOptionPane.showMessageDialog(null, "Cadastro de Drone Pessoal ainda não implementado!");
+                }
             }
         });
 
@@ -35,6 +51,4 @@ public class PainelPrincipal extends JPanel {
             }
         });
     }
-
-
 }
