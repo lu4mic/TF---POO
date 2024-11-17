@@ -10,11 +10,13 @@ public class ACMEAirDrones extends JFrame {
     private DronesLista listaD = new DronesLista();
     private PainelPrincipal painelPrincipal;
     private DroneCargaForm droneCargaForm;
+    private DronePessoalForm dronePessoalForm;
 
     public ACMEAirDrones() {
         super();
 
-        droneCargaForm= new DroneCargaForm(this);
+        droneCargaForm = new DroneCargaForm(this);
+        dronePessoalForm = new DronePessoalForm(this);
         painelPrincipal = new PainelPrincipal(this);
         setContentPane(painelPrincipal);
     }
@@ -37,6 +39,12 @@ public class ACMEAirDrones extends JFrame {
                 //droneCargaForm.atualiza();
                 setTitle("Cadastrar Drones");
                 this.setContentPane(droneCargaForm);
+                this.setSize(920, 600);
+                this.pack();
+                break;
+            case 3:
+                setTitle("Cadastrar Drones");
+                this.setContentPane(dronePessoalForm);
                 this.setSize(920, 600);
                 this.pack();
                 break;
@@ -80,5 +88,39 @@ public class ACMEAirDrones extends JFrame {
             }
             return texto.toString();
         }
+
+    public boolean CadastraDrone(int codigo, double custoFixo, double autonomia, int qtdMaxPessoas) {
+        int[] cod = listaD.getListaDrones().stream()
+                .mapToInt(Drone::getCodigo)
+                .toArray();
+
+        if (Arrays.binarySearch(cod, codigo) >= 0) {
+            return false;
+        }
+
+        Drone dp = new DronePessoal(codigo, custoFixo, autonomia, qtdMaxPessoas);
+        listaD.addDrone(dp);
+
+        listaD.getListaDrones().sort(Comparator.comparingInt(Drone::getCodigo));
+        for (Drone d : listaD.getListaDrones()) {
+            System.out.println(d.getCodigo());
+        }
+        return true;
     }
+
+    public String mostrarDronesPessoal() {
+        StringBuilder mostrarDronesPessoal = new StringBuilder();
+        if (listaD.getListaDrones().isEmpty()) {
+            return ("Nao tem drone pessoal cadastrado");
+        }
+        mostrarDronesPessoal.append("codigo - custo fixo - autonomia - quantidade maxima de pessoas\n");
+        for (Drone d : listaD.getListaDrones()) {
+            if (d instanceof DronePessoal) {
+                mostrarDronesPessoal.append(d + "\n");
+            }
+        }
+
+        return mostrarDronesPessoal.toString();
+    }
+}
 
