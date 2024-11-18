@@ -1,4 +1,6 @@
-package aplicacao;
+package aplicacao.janelas;
+
+import aplicacao.ACMEAirDrones;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -48,6 +50,12 @@ public class PainelPrincipal extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
+            }
+        });
+        botaoCadastrarTransporte.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                acmeAirDrones.mudaPainel(4);
             }
         });
     }
