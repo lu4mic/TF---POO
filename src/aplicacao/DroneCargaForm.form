@@ -182,6 +182,7 @@
           <component id="ac888" class="javax.swing.JTextArea" binding="textoErro1">
             <constraints/>
             <properties>
+              <editable value="false"/>
               <font size="14"/>
               <foreground color="-1754624"/>
               <lineWrap value="true"/>

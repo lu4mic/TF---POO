@@ -14,7 +14,7 @@ public class ACMEAirDrones extends JFrame {
 
     public ACMEAirDrones() {
         super();
-
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         droneCargaForm = new DroneCargaForm(this);
         dronePessoalForm = new DronePessoalForm(this);
         painelPrincipal = new PainelPrincipal(this);

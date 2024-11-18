@@ -38,7 +38,7 @@ public class PainelPrincipal extends JPanel {
                 if (choice == 0) { // Drone de Carga
                     acmeAirDrones.mudaPainel(2);
                 } else if (choice == 1) { // Drone Pessoal
-                    JOptionPane.showMessageDialog(null, "Cadastro de Drone Pessoal ainda não implementado!");
+                    acmeAirDrones.mudaPainel(3);
                 }
             }
         });
