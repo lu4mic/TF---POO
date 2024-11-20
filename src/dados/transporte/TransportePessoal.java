@@ -6,13 +6,10 @@ public class TransportePessoal extends Transporte {
     private int qtdPessoas;
 
     public TransportePessoal(int numero, String nomeCliente, String descricao, double peso, double latitudeOrigem,
-            double longitudeOrigem, double latitudeDestino, double longitudeDestino,
-            Estado situacao, int qtdPessoas, Drone drone) {
+            double longitudeOrigem, double latitudeDestino, double longitudeDestino, int qtdPessoas) {
 
-        super(numero, nomeCliente, descricao, peso, latitudeOrigem, longitudeOrigem, latitudeDestino, longitudeDestino,
-                situacao, drone);
+        super(numero, nomeCliente, descricao, peso, latitudeOrigem, longitudeOrigem, latitudeDestino, longitudeDestino);
         this.qtdPessoas = qtdPessoas;
-
     }
 
     @Override

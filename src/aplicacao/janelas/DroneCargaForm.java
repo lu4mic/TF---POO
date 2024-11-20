@@ -45,16 +45,10 @@ public class DroneCargaForm extends JPanel{
                     boolean climatizacao = climatizacaoCheckBox.isSelected();
                     boolean cargaViva = cargaVivaCheckBox.isSelected();
 
-                    if (cargaViva && protecao) {
-                        textoErro1.setText("A carga viva não deve ter proteção");
-                    } else if (!cargaViva && climatizacao) {
-                        textoErro1.setText("A carga inanimada não deve ter climatização");
+                    if (!acmeAirDrones.CadastraDrone(codigo, autonomia, custoFixo, pesoMax, protecao, climatizacao, cargaViva)) {
+                        textoErro1.setText("Esse codigo já existe!");
                     } else {
-                        if (!acmeAirDrones.CadastraDrone(codigo, autonomia, custoFixo, pesoMax, protecao, climatizacao, cargaViva)) {
-                            textoErro1.setText("Esse código já existe!");
-                        } else {
-                            textoErro1.setText("Drone cadastrado com sucesso!");
-                        }
+                        textoErro1.setText("Drone cadastrado com sucesso!");
                     }
                 } catch (NumberFormatException ex) {
                     textoErro1.setText("Os campos devem ser preenchidos com números. Utilize . para as casas decimais");
@@ -64,12 +58,11 @@ public class DroneCargaForm extends JPanel{
         cargaVivaCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!cargaVivaCheckBox.isSelected()) {
+                if (!cargaVivaCheckBox.isSelected()) {
                     climatizacaoCheckBox.setVisible(false);
                     protecaoCheckBox.setVisible(true);
                     climatizacaoCheckBox.setSelected(false);
-                }
-                else{
+                } else {
                     climatizacaoCheckBox.setVisible(true);
                     protecaoCheckBox.setVisible(false);
                     protecaoCheckBox.setSelected(false);

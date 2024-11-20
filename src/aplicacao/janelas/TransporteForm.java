@@ -30,6 +30,7 @@ public class TransporteForm extends JPanel {
     private JLabel tempMin;
     private JLabel qtdPessoas;
     private JPanel painelTransportes;
+    private JLabel textoErro;
 
     public TransporteForm(ACMEAirDrones acmeAirDrones) {
 
@@ -120,6 +121,66 @@ public class TransporteForm extends JPanel {
                 textoLongD.setText("");
                 textoTempMax.setText("");
                 textoTempMin.setText("");
+                textoErro.setText("");
+            }
+        });
+        botaoEnviar.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textoErro.setText("");
+
+                if (!radioPessoal.isSelected() && !radioCargaViva.isSelected() && !radioCargaInanimada.isSelected()) {
+                    textoErro.setText("Voce deve escolher um tipo de Transporte!");
+                }
+                if (textoLongD.getText().isBlank() || textoNumero.getText().isBlank() || textoDescricao.getText().isBlank()
+                        || textoLatO.getText().isBlank() || textoCliente.getText().isBlank() || textoPeso.getText().isBlank()
+                        || textoLatD.getText().isBlank() || textoLongO.getText().isBlank()) {
+                    textoErro.setText("Todos os campos devem ser preenchidos!");
+                }
+                if (radioPessoal.isSelected() && textoQtdPessoas.getText().isBlank()) {
+                    textoErro.setText("Todos os campos devem ser preenchidos!");
+                }
+                if (radioCargaViva.isSelected() && (textoTempMax.getText().isBlank() || textoTempMin.getText().isBlank())) {
+                    textoErro.setText("Todos os campos devem ser preenchidos!");
+                }
+
+                try{
+                    int numero = Integer.parseInt(textoNumero.getText());
+                    String descricao = textoDescricao.getText();
+                    String nome = textoCliente.getText();
+                    double peso = Double.parseDouble(textoPeso.getText());
+                    double latO = Double.parseDouble(textoLatO.getText());
+                    double longO = Double.parseDouble(textoLongO.getText());
+                    double latD = Double.parseDouble(textoLatD.getText());
+                    double longD = Double.parseDouble(textoLongD.getText());
+                    Integer qtdPessoas = null;
+                    boolean cargaPerigosa = false;
+                    Double tempMax = null;
+                    Double tempMin = null;
+
+                    if(radioPessoal.isSelected()){
+                        qtdPessoas = Integer.parseInt(textoQtdPessoas.getText());
+                    }
+                    if(radioCargaViva.isSelected()){
+                        tempMax = Double.parseDouble(textoTempMax.getText());
+                        tempMin = Double.parseDouble(textoTempMin.getText());
+                    }
+                    if(radioCargaInanimada.isSelected()){
+                        cargaPerigosa = checkBoxCargaPerigosa.isSelected();
+                    }
+
+                    if (!acmeAirDrones.CadastraTransporte(numero,nome,descricao,peso,latO,latD,longO,longD,qtdPessoas,cargaPerigosa,tempMax,tempMin)) {
+                        textoErro.setText("Esse codigo já existe!");
+                    }
+                    else{
+                        textoErro.setText("Transporte Cadastrado!");
+                    }
+
+                }
+                catch(NumberFormatException ex){
+                    textoErro.setText("Os campos devem ser preenchidos corretamente!!");
+                }
+
             }
         });
     }

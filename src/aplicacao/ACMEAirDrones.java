@@ -5,6 +5,7 @@ import aplicacao.janelas.DronePessoalForm;
 import aplicacao.janelas.PainelPrincipal;
 import aplicacao.janelas.TransporteForm;
 import dados.drone.*;
+import dados.transporte.*;
 
 import javax.swing.*;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.Comparator;
 
 public class ACMEAirDrones extends JFrame {
     private DronesLista listaD = new DronesLista();
+    private TransporteFila filaTransporte = new TransporteFila();
     private PainelPrincipal painelPrincipal;
     private DroneCargaForm droneCargaForm;
     private DronePessoalForm dronePessoalForm;
@@ -135,7 +137,32 @@ public class ACMEAirDrones extends JFrame {
         return mostrarDronesPessoal.toString();
     }
 
-    public boolean CadastraTransporte() {
+    public boolean CadastraTransporte(int numero, String nome, String descricao, double peso, double latO, double latD, double longO, double longD,
+                                      Integer qtdPessoas, boolean cargaperigosa, Double tempMax, Double tempMin) {
+
+        for(Transporte tr : filaTransporte.getFilaTransporte()){
+            if(tr.getNumero() == numero){
+                return false;
+            }
+        }
+        if(tempMax == null || tempMin == null && qtdPessoas == null) {
+            //TransporteInanimado
+            Transporte t = new TransporteCargaInanimada(numero,nome,descricao,peso,latO,longO,latD,longD,cargaperigosa);
+            filaTransporte.addTransporte(t);
+            return true;
+        }
+        else if(tempMin != null) {
+            //TransporteCargaViva
+            Transporte t = new TransporteCargaViva(numero,nome,descricao,peso,latO,longO,latD,longD,tempMax,tempMin);
+            filaTransporte.addTransporte(t);
+            return true;
+        }
+        else if(qtdPessoas != null) {
+            //CargaPessoal
+            Transporte t = new TransportePessoal(numero,nome,descricao,peso,latO,longO,latD,longD,qtdPessoas);
+            filaTransporte.addTransporte(t);
+            return true;
+        }
         return true;
     }
 }

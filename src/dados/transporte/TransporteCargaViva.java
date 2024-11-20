@@ -8,10 +8,9 @@ public class TransporteCargaViva extends Transporte {
 
     public TransporteCargaViva(int numero, String nomeCliente, String descricao, double peso,
             double latitudeOrigem, double longitudeOrigem, double latitudeDestino,
-            double longitudeDestino, Estado situacao, double temperaturaMaxima, double temperaturaMinima, Drone drone) {
+            double longitudeDestino, double temperaturaMaxima, double temperaturaMinima) {
 
-        super(numero, nomeCliente, descricao, peso, latitudeOrigem, longitudeOrigem, latitudeDestino, longitudeDestino,
-                situacao, drone);
+        super(numero, nomeCliente, descricao, peso, latitudeOrigem, longitudeOrigem, latitudeDestino, longitudeDestino);
         this.temperaturaMaxima = temperaturaMaxima;
         this.temperaturaMinima = temperaturaMinima;
     }
