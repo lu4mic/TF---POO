@@ -202,17 +202,17 @@ public class ACMEAirDrones extends JFrame {
                 first.setDrone(candidatoFinal);                          //seta o drone no transporte
                 first.setSituacao(Transporte.Estado.ALOCADO);           //seta o transporte como alocado
                 filaTransporte.getFilaTransporte().remove();                //remove da fila de transportes
-                transportesAlocados.add(first);
+                transportesAlocados.add(first);                             //criei uma nova lista que só tem os alocados, finalizados ou cancelados!
 
             count++;
         } while (count != tamanho);
     }
 
-    public boolean isDisponivel(Drone d) {
+    private boolean isDisponivel(Drone d) {
         return d.getCount() == 0;
     }
 
-    public Drone melhorCandidato(Transporte transporte, Drone drone, Drone candidatoAtual) {
+    private Drone melhorCandidato(Transporte transporte, Drone drone, Drone candidatoAtual) {
         if (transporte instanceof TransportePessoal && drone instanceof DronePessoal) {
             int qtdNecessaria = ((TransportePessoal) transporte).getQtdPessoas();
             int capacidadeDrone = ((DronePessoal) drone).getQtdMaxPessoas();
