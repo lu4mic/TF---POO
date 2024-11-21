@@ -13,6 +13,7 @@ public class TransporteCargaInanimada extends Transporte {
         this.cargaPerigosa = cargaPerigosa;
     }
 
+
     @Override
     public double calculaCusto() {
         double distancia = super.getDistancia();

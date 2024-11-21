@@ -58,5 +58,29 @@ public class PainelPrincipal extends JPanel {
                 acmeAirDrones.mudaPainel(4);
             }
         });
+        botaoProcessarTransportes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int quantidade = acmeAirDrones.processarTransportesPendentes();
+                String mensagem = "";
+                if(quantidade == -1){
+                    mensagem = "Nenhum transporte esta pendente!";
+                }
+                else if(quantidade == -2){
+                    mensagem =  "Nenhum drone foi cadastrado";
+                }
+                else if (quantidade == 0) {
+                    mensagem = "Nenhum transporte foi cadastrado";
+                }
+                else mensagem =  "Foram processados "+ quantidade +" transportes";
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        mensagem,
+                        "Painel de Texto",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+        });
     }
 }

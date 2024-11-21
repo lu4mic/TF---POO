@@ -24,6 +24,7 @@ public class DroneCargaForm extends JPanel{
 
     public DroneCargaForm(ACMEAirDrones acmeAirDrones) {
         add(painelDroneCarga);
+        climatizacaoCheckBox.setVisible(false);
 
         botaoEnviar.addActionListener(new ActionListener() {
             @Override
@@ -86,7 +87,16 @@ public class DroneCargaForm extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 acmeAirDrones.mudaPainel(1);
+                climatizacaoCheckBox.setSelected(false);
+                protecaoCheckBox.setSelected(false);
+                cargaVivaCheckBox.setSelected(false);
+                textoCustoFixo.setText("");
+                textoPesoMax.setText("");
+                textoCodigo.setText("");
+                textoAutonomia.setText("");
+                textoErro1.setText("");
             }
+
         });
         buttonMostrar.addActionListener(new ActionListener() {
             @Override

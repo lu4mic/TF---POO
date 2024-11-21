@@ -101,6 +101,22 @@ public class TransporteForm extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 acmeAirDrones.mudaPainel(1);
+                checkBoxCargaPerigosa.setSelected(false);
+                radioPessoal.setSelected(false);
+                radioCargaViva.setSelected(false);
+                radioCargaInanimada.setSelected(false);
+                textoCliente.setText("");
+                textoPeso.setText("");
+                textoDescricao.setText("");
+                textoLatO.setText("");
+                textoLongO.setText("");
+                textoLatD.setText("");
+                textoQtdPessoas.setText("");
+                textoNumero.setText("");
+                textoLongD.setText("");
+                textoTempMax.setText("");
+                textoTempMin.setText("");
+                textoErro.setText("");
             }
         });
         botaoLimpar.addActionListener(new ActionListener() {
@@ -131,6 +147,7 @@ public class TransporteForm extends JPanel {
 
                 if (!radioPessoal.isSelected() && !radioCargaViva.isSelected() && !radioCargaInanimada.isSelected()) {
                     textoErro.setText("Voce deve escolher um tipo de Transporte!");
+                    return;
                 }
                 if (textoLongD.getText().isBlank() || textoNumero.getText().isBlank() || textoDescricao.getText().isBlank()
                         || textoLatO.getText().isBlank() || textoCliente.getText().isBlank() || textoPeso.getText().isBlank()
