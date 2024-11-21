@@ -167,12 +167,13 @@ public class ACMEAirDrones extends JFrame {
         return false;
     }
 
-    public void ProcessarTransportesPendentes() {
+    public int ProcessarTransportesPendentes() {
         if (listaD.getListaDrones().isEmpty() || filaTransporte.getFilaTransporte().isEmpty()) {
-            return;
+            return 0;
         }
 
-        int tamanho = listaD.getListaDrones().size();
+        int tentativasMax = listaD.getListaDrones().size();
+        int tentativas = 0;
         int count = 0;
 
 
@@ -183,10 +184,6 @@ public class ACMEAirDrones extends JFrame {
             }
 
             Drone candidatoFinal = null;
-
-            if (listaD.getListaDrones().isEmpty() || filaTransporte.getFilaTransporte().isEmpty()) {
-                return;
-            }
 
             for (Drone d : listaD.getListaDrones()) {
                 if (!isDisponivel(d)) {           //drone só pode estar em um transporte
@@ -199,13 +196,16 @@ public class ACMEAirDrones extends JFrame {
                 filaTransporte.getFilaTransporte().remove();   //remove e adiciona no final
                 filaTransporte.getFilaTransporte().add(first);
             }
+            else {
                 first.setDrone(candidatoFinal);                          //seta o drone no transporte
                 first.setSituacao(Transporte.Estado.ALOCADO);           //seta o transporte como alocado
                 filaTransporte.getFilaTransporte().remove();                //remove da fila de transportes
-                transportesAlocados.add(first);                             //criei uma nova lista que só tem os alocados, finalizados ou cancelados!
-
-            count++;
-        } while (count != tamanho);
+                transportesAlocados.add(first);                         //criei uma nova lista que só tem os alocados, finalizados ou cancelados!
+                count++;
+            }
+            tentativas++;
+        } while (tentativas != tentativasMax);
+        return count;
     }
 
     private boolean isDisponivel(Drone d) {
