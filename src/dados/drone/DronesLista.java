@@ -17,8 +17,4 @@ public class DronesLista {
         public ArrayList<Drone> getListaDrones(){
             return (ArrayList<Drone>) listaDrones.clone();
         }
-
-        public void setListaDrones(ArrayList<Drone> listaDrones){
-            this.listaDrones = listaDrones;
-        }
 }

@@ -16,7 +16,7 @@ public abstract class Transporte {
 
     public Transporte(int numero, String nomeCliente, String descricao, double peso,
             double latitudeOrigem, double longitudeOrigem, double latitudeDestino,
-            double longitudeDestino, Estado situacao, Drone drone) {
+            double longitudeDestino) {
                 
         this.numero = numero;
         this.nomeCliente = nomeCliente;
@@ -27,7 +27,7 @@ public abstract class Transporte {
         this.latitudeDestino = latitudeDestino;
         this.longitudeDestino = longitudeDestino;
         this.situacao = Estado.PENDENTE;
-        this.drone = drone;
+        this.drone = null;
     }
 
     public abstract double calculaCusto();
@@ -38,6 +38,10 @@ public abstract class Transporte {
 
     public Drone getDrone() {
         return drone;
+    }
+
+    public int getNumero() {
+        return numero;
     }
 
     public double getDistancia(){
