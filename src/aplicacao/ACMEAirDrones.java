@@ -8,6 +8,7 @@ import dados.drone.*;
 import dados.transporte.*;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -18,10 +19,12 @@ public class ACMEAirDrones extends JFrame {
     private DroneCargaForm droneCargaForm;
     private DronePessoalForm dronePessoalForm;
     private TransporteForm transporteForm;
+    private ArrayList<Transporte> transportesAlocados;
 
     public ACMEAirDrones() {
         super();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        transportesAlocados = new ArrayList<>();
         droneCargaForm = new DroneCargaForm(this);
         dronePessoalForm = new DronePessoalForm(this);
         painelPrincipal = new PainelPrincipal(this);
@@ -140,30 +143,110 @@ public class ACMEAirDrones extends JFrame {
     public boolean CadastraTransporte(int numero, String nome, String descricao, double peso, double latO, double latD, double longO, double longD,
                                       Integer qtdPessoas, boolean cargaperigosa, Double tempMax, Double tempMin) {
 
-        for(Transporte tr : filaTransporte.getFilaTransporte()){
-            if(tr.getNumero() == numero){
+        for (Transporte tr : filaTransporte.getFilaTransporte()) {
+            if (tr.getNumero() == numero) {
                 return false;
             }
         }
-        if(tempMax == null || tempMin == null && qtdPessoas == null) {
+        if (tempMax == null || tempMin == null && qtdPessoas == null) {
             //TransporteInanimado
-            Transporte t = new TransporteCargaInanimada(numero,nome,descricao,peso,latO,longO,latD,longD,cargaperigosa);
+            Transporte t = new TransporteCargaInanimada(numero, nome, descricao, peso, latO, longO, latD, longD, cargaperigosa);
             filaTransporte.addTransporte(t);
             return true;
-        }
-        else if(tempMin != null) {
+        } else if (tempMin != null) {
             //TransporteCargaViva
-            Transporte t = new TransporteCargaViva(numero,nome,descricao,peso,latO,longO,latD,longD,tempMax,tempMin);
+            Transporte t = new TransporteCargaViva(numero, nome, descricao, peso, latO, longO, latD, longD, tempMax, tempMin);
             filaTransporte.addTransporte(t);
             return true;
-        }
-        else if(qtdPessoas != null) {
+        } else if (qtdPessoas != null) {
             //CargaPessoal
-            Transporte t = new TransportePessoal(numero,nome,descricao,peso,latO,longO,latD,longD,qtdPessoas);
+            Transporte t = new TransportePessoal(numero, nome, descricao, peso, latO, longO, latD, longD, qtdPessoas);
             filaTransporte.addTransporte(t);
             return true;
         }
-        return true;
+        return false;
     }
-}
 
+    public void ProcessarTransportesPendentes() {
+        if (listaD.getListaDrones().isEmpty() || filaTransporte.getFilaTransporte().isEmpty()) {
+            return;
+        }
+
+        int tamanho = listaD.getListaDrones().size();
+        int count = 0;
+
+
+        do {
+            Transporte first = filaTransporte.getFilaTransporte().peek();   //reseta o candidato e pega o primeiro transporte
+            if(first == null){
+                break;
+            }
+
+            Drone candidatoFinal = null;
+
+            if (listaD.getListaDrones().isEmpty() || filaTransporte.getFilaTransporte().isEmpty()) {
+                return;
+            }
+
+            for (Drone d : listaD.getListaDrones()) {
+                if (!isDisponivel(d)) {           //drone só pode estar em um transporte
+                    continue;            //proximo drone
+                }
+                candidatoFinal = melhorCandidato(first, d, candidatoFinal);
+            }
+
+            if (candidatoFinal == null) {
+                filaTransporte.getFilaTransporte().remove();   //remove e adiciona no final
+                filaTransporte.getFilaTransporte().add(first);
+            }
+                first.setDrone(candidatoFinal);                          //seta o drone no transporte
+                first.setSituacao(Transporte.Estado.ALOCADO);           //seta o transporte como alocado
+                filaTransporte.getFilaTransporte().remove();                //remove da fila de transportes
+                transportesAlocados.add(first);
+
+            count++;
+        } while (count != tamanho);
+    }
+
+    public boolean isDisponivel(Drone d) {
+        return d.getCount() == 0;
+    }
+
+    public Drone melhorCandidato(Transporte transporte, Drone drone, Drone candidatoAtual) {
+        if (transporte instanceof TransportePessoal && drone instanceof DronePessoal) {
+            int qtdNecessaria = ((TransportePessoal) transporte).getQtdPessoas();
+            int capacidadeDrone = ((DronePessoal) drone).getQtdMaxPessoas();
+
+            if (capacidadeDrone >= qtdNecessaria) {
+                if (candidatoAtual == null || capacidadeDrone < ((DronePessoal) candidatoAtual).getQtdMaxPessoas()) {
+                    return drone; // Escolhe o drone com capacidade mais próxima
+                }
+            }
+        }
+        else if (transporte instanceof TransporteCargaInanimada && drone instanceof DroneCargaInanimada) {
+            double pesoNecessario = transporte.getPeso();
+            double capacidadeDrone = ((DroneCargaInanimada) drone).getPesoMaximo();
+
+            if (capacidadeDrone >= pesoNecessario) {
+                if (candidatoAtual == null || capacidadeDrone < ((DroneCargaInanimada) candidatoAtual).getPesoMaximo()) {
+                    return drone; // Escolhe o drone com capacidade mais próxima
+                }
+            }
+        }
+        else if (transporte instanceof TransporteCargaViva && drone instanceof DroneCargaViva) {
+            double pesoNecessario = transporte.getPeso();
+            double capacidadeDrone = ((DroneCargaViva) drone).getPesoMaximo();
+
+            if (capacidadeDrone >= pesoNecessario) {
+                if (candidatoAtual == null || capacidadeDrone < ((DroneCargaViva) candidatoAtual).getPesoMaximo()) {
+                    return drone; // Escolhe o drone com capacidade mais próxima
+                }
+            }
+        }
+
+        return candidatoAtual; // Retorna o candidato atual se o drone não for melhor
+    }
+
+
+
+}

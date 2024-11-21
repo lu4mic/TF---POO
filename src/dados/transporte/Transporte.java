@@ -32,7 +32,7 @@ public abstract class Transporte {
 
     public abstract double calculaCusto();
 
-    enum Estado {
+    public enum Estado {
         PENDENTE, ALOCADO, TERMINADO, CANCELADO
     }
 
@@ -42,6 +42,22 @@ public abstract class Transporte {
 
     public int getNumero() {
         return numero;
+    }
+
+    public double getPeso() {
+        return peso;
+    }
+
+    public void setDrone(Drone drone) {
+        this.drone = drone;
+    }
+
+    public Estado getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(Estado situacao) {
+        this.situacao = situacao;
     }
 
     public double getDistancia(){

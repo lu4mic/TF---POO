@@ -18,4 +18,8 @@ public class TransportePessoal extends Transporte {
         return (getDrone().calculaCustoKm() * distancia) + 10 * qtdPessoas;
     }
 
+    public int getQtdPessoas() {
+        return qtdPessoas;
+    }
+
 }

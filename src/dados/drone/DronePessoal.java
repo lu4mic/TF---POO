@@ -12,6 +12,11 @@ public class DronePessoal extends Drone{
     public double calculaCustoKm() {
         return getCustoFixo() + 2;
     }
+
+    public int getQtdMaxPessoas() {
+        return qtdMaxPessoas;
+    }
+
     public String toString(){
         return super.toString() + " - " + qtdMaxPessoas;
     }
