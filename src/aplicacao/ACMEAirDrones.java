@@ -167,9 +167,13 @@ public class ACMEAirDrones extends JFrame {
         return false;
     }
 
-    public int ProcessarTransportesPendentes() {
-        if (listaD.getListaDrones().isEmpty() || filaTransporte.getFilaTransporte().isEmpty()) {
-            return 0;
+    public int processarTransportesPendentes() {
+        if(filaTransporte.getFilaTransporte().isEmpty()){
+            return -1;
+        }
+
+        if (listaD.getListaDrones().isEmpty()) {
+            return -2;
         }
 
         int tentativasMax = listaD.getListaDrones().size();
@@ -213,6 +217,10 @@ public class ACMEAirDrones extends JFrame {
     }
 
     private Drone melhorCandidato(Transporte transporte, Drone drone, Drone candidatoAtual) {
+        if (!isCompativel(transporte, drone)) {
+            return candidatoAtual; // Ignora drones incompatíveis
+        }
+
         if (transporte instanceof TransportePessoal && drone instanceof DronePessoal) {
             int qtdNecessaria = ((TransportePessoal) transporte).getQtdPessoas();
             int capacidadeDrone = ((DronePessoal) drone).getQtdMaxPessoas();
@@ -222,8 +230,7 @@ public class ACMEAirDrones extends JFrame {
                     return drone; // Escolhe o drone com capacidade mais próxima
                 }
             }
-        }
-        else if (transporte instanceof TransporteCargaInanimada && drone instanceof DroneCargaInanimada) {
+        } else if (transporte instanceof TransporteCargaInanimada && drone instanceof DroneCargaInanimada) {
             double pesoNecessario = transporte.getPeso();
             double capacidadeDrone = ((DroneCargaInanimada) drone).getPesoMaximo();
 
@@ -232,8 +239,7 @@ public class ACMEAirDrones extends JFrame {
                     return drone; // Escolhe o drone com capacidade mais próxima
                 }
             }
-        }
-        else if (transporte instanceof TransporteCargaViva && drone instanceof DroneCargaViva) {
+        } else if (transporte instanceof TransporteCargaViva && drone instanceof DroneCargaViva) {
             double pesoNecessario = transporte.getPeso();
             double capacidadeDrone = ((DroneCargaViva) drone).getPesoMaximo();
 
@@ -244,8 +250,16 @@ public class ACMEAirDrones extends JFrame {
             }
         }
 
-        return candidatoAtual; // Retorna o candidato atual se o drone não for melhor
+        return candidatoAtual;
     }
+
+    // Novo método para validar compatibilidade
+    private boolean isCompativel(Transporte transporte, Drone drone) {
+        return (transporte instanceof TransportePessoal && drone instanceof DronePessoal) ||
+                (transporte instanceof TransporteCargaInanimada && drone instanceof DroneCargaInanimada) ||
+                (transporte instanceof TransporteCargaViva && drone instanceof DroneCargaViva);
+    }
+
 
 
 
