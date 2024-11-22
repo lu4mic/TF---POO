@@ -98,7 +98,13 @@ public class DronePessoalForm extends JPanel {
         botaoVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                acme.mudaPainel(1); // Voltar para o painel principal
+                acme.mudaPainel(1);
+
+                campoCodigo.setText("");
+                campoCustoFixo.setText("");
+                campoAutonomia.setText("");
+                campoQuantidadePessoas.setText("");
+                areaTexto.setText("");
             }
         });
 

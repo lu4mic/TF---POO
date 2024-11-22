@@ -70,7 +70,7 @@ public class PainelPrincipal extends JPanel {
                     mensagem =  "Nenhum drone foi cadastrado";
                 }
                 else if (quantidade == 0) {
-                    mensagem = "Nenhum transporte foi cadastrado";
+                    mensagem = "Nenhum transporte foi procesado";
                 }
                 else mensagem =  "Foram processados "+ quantidade +" transportes";
 
