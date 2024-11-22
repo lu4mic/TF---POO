@@ -1,9 +1,6 @@
 package aplicacao;
 
-import aplicacao.janelas.DroneCargaForm;
-import aplicacao.janelas.DronePessoalForm;
-import aplicacao.janelas.PainelPrincipal;
-import aplicacao.janelas.TransporteForm;
+import aplicacao.janelas.*;
 import dados.drone.*;
 import dados.transporte.*;
 
@@ -19,6 +16,7 @@ public class ACMEAirDrones extends JFrame {
     private DroneCargaForm droneCargaForm;
     private DronePessoalForm dronePessoalForm;
     private TransporteForm transporteForm;
+    private MostrarTransportes mostrarTransportes;
     private ArrayList<Transporte> transportesAlocados;
 
     public ACMEAirDrones() {
@@ -29,6 +27,7 @@ public class ACMEAirDrones extends JFrame {
         dronePessoalForm = new DronePessoalForm(this);
         painelPrincipal = new PainelPrincipal(this);
         transporteForm = new TransporteForm(this);
+        mostrarTransportes = new MostrarTransportes(this);
         setContentPane(painelPrincipal);
     }
 
@@ -62,6 +61,12 @@ public class ACMEAirDrones extends JFrame {
             case 4:
                 setTitle("Cadastrar Transportes");
                 this.setContentPane(transporteForm);
+                this.setSize(920, 600);
+                this.pack();
+                break;
+            case 5:
+                setTitle("Mostrar todos Transportes");
+                this.setContentPane(mostrarTransportes);
                 this.setSize(920, 600);
                 this.pack();
                 break;
@@ -273,8 +278,6 @@ public class ACMEAirDrones extends JFrame {
         for(Transporte t : filaTransporte.getFilaTransporte()) {
             texto.append(t + "\n");
         }
-
-        System.out.println(texto);
         return texto.toString();
     }
 }

@@ -61,9 +61,9 @@ public abstract class Transporte {
     }
 
     public String toString(){
-        return "Numero: "+ numero + ", Nome Cliente: " + nomeCliente + ", Descricao: " + descricao + ", Peso: " + peso
+        return "Numero: "+ numero + ", Situacao: " + situacao + ", Nome Cliente: " + nomeCliente + ", Descricao: " + descricao + ", Peso: " + peso
                 + ", LatitudeOrigem: " + latitudeOrigem + ", LatitudeDestino: " + latitudeDestino
-                + ", LatitudeDestino: " + latitudeDestino + ", Situacao: " + situacao + ", Drone: " + drone;
+                + ", LatitudeDestino: " + latitudeDestino +  ", Drone: " + drone;
     }
 
     public double getDistancia(){
