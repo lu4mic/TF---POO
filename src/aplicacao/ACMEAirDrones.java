@@ -148,17 +148,17 @@ public class ACMEAirDrones extends JFrame {
                 return false;
             }
         }
-        if (tempMax == null || tempMin == null && qtdPessoas == null) {
+        if (tempMax == null && tempMin == null && qtdPessoas == null) {
             //TransporteInanimado
             Transporte t = new TransporteCargaInanimada(numero, nome, descricao, peso, latO, longO, latD, longD, cargaperigosa);
             filaTransporte.addTransporte(t);
             return true;
-        } else if (tempMin != null) {
+        } else if (tempMin != null && tempMax != null) {
             //TransporteCargaViva
             Transporte t = new TransporteCargaViva(numero, nome, descricao, peso, latO, longO, latD, longD, tempMax, tempMin);
             filaTransporte.addTransporte(t);
             return true;
-        } else if (qtdPessoas != null) {
+        } else if (qtdPessoas != null){
             //CargaPessoal
             Transporte t = new TransportePessoal(numero, nome, descricao, peso, latO, longO, latD, longD, qtdPessoas);
             filaTransporte.addTransporte(t);
@@ -191,7 +191,7 @@ public class ACMEAirDrones extends JFrame {
 
             for (Drone d : listaD.getListaDrones()) {
                 if (!isDisponivel(d)) {           //drone só pode estar em um transporte
-                    continue;            //proximo drone
+                    continue;                 //proximo drone
                 }
                 candidatoFinal = melhorCandidato(first, d, candidatoFinal);
             }
@@ -261,6 +261,20 @@ public class ACMEAirDrones extends JFrame {
     }
 
 
+    public String mostrarTodosTransportes(){
+        if(transportesAlocados.isEmpty() && filaTransporte.getFilaTransporte().isEmpty()) {
+            return null;
+        }
 
+        StringBuilder texto = new StringBuilder();
+        for (Transporte t : transportesAlocados) {
+            texto.append(t + "\n");
+        }
+        for(Transporte t : filaTransporte.getFilaTransporte()) {
+            texto.append(t + "\n");
+        }
 
+        System.out.println(texto);
+        return texto.toString();
+    }
 }

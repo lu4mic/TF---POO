@@ -17,6 +17,6 @@ public class DroneCargaViva extends DroneCarga {
     }
 
     public String toString(){
-        return super.toString() + " Climatizado: " + climatizado;
+        return super.toString() + ", Climatizado: " + climatizado;
     }
 }

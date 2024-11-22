@@ -60,6 +60,12 @@ public abstract class Transporte {
         this.situacao = situacao;
     }
 
+    public String toString(){
+        return "Numero: "+ numero + ", Nome Cliente: " + nomeCliente + ", Descricao: " + descricao + ", Peso: " + peso
+                + ", LatitudeOrigem: " + latitudeOrigem + ", LatitudeDestino: " + latitudeDestino
+                + ", LatitudeDestino: " + latitudeDestino + ", Situacao: " + situacao + ", Drone: " + drone;
+    }
+
     public double getDistancia(){
         double dlon, dlat, a, distancia;
 
