@@ -17,6 +17,6 @@ public class DroneCargaInanimada extends DroneCarga{
     }
 
     public String toString(){
-        return super.toString() + " Protecao: " + protecao;
+        return super.toString() + ", Protecao: " + protecao;
     }
 }

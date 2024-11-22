@@ -22,4 +22,11 @@ public class TransportePessoal extends Transporte {
         return qtdPessoas;
     }
 
+    public String toString(){
+        if(this.getDrone()== null){
+            return super.toString() + ", Quantidade de pessoal: " + qtdPessoas;
+        }
+        return super.toString() + ", Quantidade de pessoal: " + qtdPessoas + ", Custo: "+ calculaCusto();
+    }
+
 }

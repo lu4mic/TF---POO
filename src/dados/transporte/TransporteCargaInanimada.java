@@ -1,7 +1,5 @@
 package dados.transporte;
 
-import dados.drone.Drone;
-
 public class TransporteCargaInanimada extends Transporte {
     private boolean cargaPerigosa;
 
@@ -11,6 +9,13 @@ public class TransporteCargaInanimada extends Transporte {
 
         super(numero, nomeCliente, descricao, peso, latitudeOrigem, longitudeOrigem, latitudeDestino, longitudeDestino);
         this.cargaPerigosa = cargaPerigosa;
+    }
+
+    public String toString(){
+        if(this.getDrone()==null){
+            return super.toString() + ", Carga Perigosa: " + cargaPerigosa;
+        }
+        return super.toString() + ", Carga Perigosa: " + cargaPerigosa + " Custo: "+ calculaCusto();
     }
 
 

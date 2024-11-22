@@ -35,6 +35,6 @@ public abstract class Drone {
     public abstract double calculaCustoKm();
 
     public String toString() {
-        return codigo + " - " + custoFixo + " - " + autonomia;
+        return  "Codigo: " + codigo + ", Custo Fixo: " + custoFixo + ", Autonomia: " + autonomia;
     }
 }

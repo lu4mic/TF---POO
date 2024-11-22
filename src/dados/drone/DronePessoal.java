@@ -18,6 +18,6 @@ public class DronePessoal extends Drone{
     }
 
     public String toString(){
-        return super.toString() + " - " + qtdMaxPessoas;
+        return super.toString() + ", Quantidade Maxima: " + qtdMaxPessoas;
     }
 }

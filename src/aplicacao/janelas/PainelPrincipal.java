@@ -70,7 +70,7 @@ public class PainelPrincipal extends JPanel {
                     mensagem =  "Nenhum drone foi cadastrado";
                 }
                 else if (quantidade == 0) {
-                    mensagem = "Nenhum transporte foi cadastrado";
+                    mensagem = "Nenhum transporte foi procesado";
                 }
                 else mensagem =  "Foram processados "+ quantidade +" transportes";
 
@@ -80,6 +80,18 @@ public class PainelPrincipal extends JPanel {
                         "Painel de Texto",
                         JOptionPane.INFORMATION_MESSAGE
                 );
+            }
+        });
+        botaoMostrarT.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(acmeAirDrones.mostrarTodosTransportes()==null){
+                    JOptionPane.showMessageDialog(null, "Nenhum transporte cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    acmeAirDrones.mudaPainel(5);
+                }
+
             }
         });
     }
