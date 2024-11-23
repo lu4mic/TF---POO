@@ -303,39 +303,51 @@ public class ACMEAirDrones extends JFrame {
     }
 
     public String alteraSituacao(int codigo, int opcao) {
-        StringBuilder str = new StringBuilder();
-
+        if(transportesAlocados.isEmpty() && filaTransporte.getFilaTransporte().isEmpty()) {
+            return "Lista está vazia";
+        }
         for(Transporte t : transportesAlocados) {
-            if(t.getNumero() == codigo) {
+            if (t.getNumero() == codigo) {
                 if(t.getSituacao() == Transporte.Estado.CANCELADO || t.getSituacao() == Transporte.Estado.TERMINADO) {
-                    str.append("nao é possivel mudar a situaçao desse transporte" + "\n");
-                    //nao sei se vamos fazer isso ou tu vai por uma mensagem tipo essa do lado
+                    return "Situacao nao pode ser modificada.";
                 }
                 switch (opcao) {
                     case 1: //cancelado
                         t.setSituacao(Transporte.Estado.CANCELADO);
-                        str.append("situacao cancelada do transporte " + t + "\n");
-                        break;
+                        return "Situacao modificada para cancelado com sucesso \n";
                     case 2: //terminado
                         t.setSituacao(Transporte.Estado.TERMINADO);
-                        str.append("situacao terminada do transporte " + t + "\n");
-                        break;
+                        return "Situacao modificada pra terminado com sucesso \n";
+                    default:
+                        return "Algo deu errado";
                 }
+            }else{
+                return "Esse codigo nao existe";
             }
+        }
             for(Transporte transporte : filaTransporte.getFilaTransporte()) {
-                switch (opcao) {
-                    case 1: //cancelado
-                        t.setSituacao(Transporte.Estado.CANCELADO);
-                        str.append("situacao cancelada do transporte " + t + "\n");
-                        break;
-                    case 2: //terminado
-                        t.setSituacao(Transporte.Estado.TERMINADO);
-                        str.append("situacao terminada do transporte " + t + "\n");
-                        break;
-                }
+                if (transporte.getNumero() == codigo) {
+                    if(transporte.getSituacao() == Transporte.Estado.CANCELADO || transporte.getSituacao() == Transporte.Estado.TERMINADO) {
+                        return "Situacao nao pode ser modificada.";
+                    }
+                    switch (opcao) {
+                        case 1: //cancelado
+                            transporte.setSituacao(Transporte.Estado.CANCELADO);
+                            return "Situacao modificada para cancelado com sucesso \n";
+
+                        case 2: //terminado
+                            transporte.setSituacao(Transporte.Estado.TERMINADO);
+                            return "Situacao modificada pra terminado com sucesso \n";
+
+                        default:
+                            return "Algo deu errado";
+                    }
+                }else{
+                    return "Esse codigo nao existe"; //nao sei se precisa desse else ou o default ja faz isso
                 }
             }
-        return str.toString();
+
+            return "";
     }
 
 }
