@@ -280,4 +280,62 @@ public class ACMEAirDrones extends JFrame {
         }
         return texto.toString();
     }
+
+    public String mostraRelatorioGeralDroneETransporte(){
+        StringBuilder str = new StringBuilder();
+        if(!(transportesAlocados.isEmpty() && filaTransporte.getFilaTransporte().isEmpty())) {
+            str.append("Transportes:\n");
+
+            for (Transporte t : transportesAlocados) {
+                str.append(t + "\n");
+            }
+            for(Transporte t : filaTransporte.getFilaTransporte()) {
+                str.append(t +  "\n");
+            }
+        }
+        if(!listaD.getListaDrones().isEmpty()) {
+            str.append("Drones:\n");
+            for(Drone d : listaD.getListaDrones()) {
+                str.append(d + "\n");
+            }
+        }
+        return str.toString();
+    }
+
+    public String alteraSituacao(int codigo, int opcao) {
+        StringBuilder str = new StringBuilder();
+
+        for(Transporte t : transportesAlocados) {
+            if(t.getNumero() == codigo) {
+                if(t.getSituacao() == Transporte.Estado.CANCELADO || t.getSituacao() == Transporte.Estado.TERMINADO) {
+                    str.append("nao é possivel mudar a situaçao desse transporte" + "\n");
+                    //nao sei se vamos fazer isso ou tu vai por uma mensagem tipo essa do lado
+                }
+                switch (opcao) {
+                    case 1: //cancelado
+                        t.setSituacao(Transporte.Estado.CANCELADO);
+                        str.append("situacao cancelada do transporte " + t + "\n");
+                        break;
+                    case 2: //terminado
+                        t.setSituacao(Transporte.Estado.TERMINADO);
+                        str.append("situacao terminada do transporte " + t + "\n");
+                        break;
+                }
+            }
+            for(Transporte transporte : filaTransporte.getFilaTransporte()) {
+                switch (opcao) {
+                    case 1: //cancelado
+                        t.setSituacao(Transporte.Estado.CANCELADO);
+                        str.append("situacao cancelada do transporte " + t + "\n");
+                        break;
+                    case 2: //terminado
+                        t.setSituacao(Transporte.Estado.TERMINADO);
+                        str.append("situacao terminada do transporte " + t + "\n");
+                        break;
+                }
+                }
+            }
+        return str.toString();
+    }
+
 }
