@@ -18,16 +18,20 @@ public class ACMEAirDrones extends JFrame {
     private TransporteForm transporteForm;
     private MostrarTransportes mostrarTransportes;
     private ArrayList<Transporte> transportesAlocados;
+    private AlteraSituacao alteraSituacao;
+    private MostrarRelatorioGeral mostrarRelatorioGeral;
 
     public ACMEAirDrones() {
         super();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         transportesAlocados = new ArrayList<>();
+        alteraSituacao = new AlteraSituacao(this);
         droneCargaForm = new DroneCargaForm(this);
         dronePessoalForm = new DronePessoalForm(this);
         painelPrincipal = new PainelPrincipal(this);
         transporteForm = new TransporteForm(this);
         mostrarTransportes = new MostrarTransportes(this);
+        mostrarRelatorioGeral = new MostrarRelatorioGeral(this);
         setContentPane(painelPrincipal);
     }
 
@@ -67,6 +71,18 @@ public class ACMEAirDrones extends JFrame {
             case 5:
                 setTitle("Mostrar todos Transportes");
                 this.setContentPane(mostrarTransportes);
+                this.setSize(920, 600);
+                this.pack();
+                break;
+            case 6:
+                setTitle("Alterar Transportes");
+                this.setContentPane(alteraSituacao);
+                this.setSize(920, 600);
+                this.pack();
+                break;
+            case 7:
+                setTitle("Mostrar Relatorio Geral");
+                this.setContentPane(mostrarRelatorioGeral);
                 this.setSize(920, 600);
                 this.pack();
                 break;
@@ -282,6 +298,10 @@ public class ACMEAirDrones extends JFrame {
     }
 
     public String mostraRelatorioGeralDroneETransporte(){
+        if(transportesAlocados.isEmpty() && filaTransporte.getFilaTransporte().isEmpty() && listaD.getListaDrones().isEmpty()) {
+            return null;
+        }
+
         StringBuilder str = new StringBuilder();
         if(!(transportesAlocados.isEmpty() && filaTransporte.getFilaTransporte().isEmpty())) {
             str.append("Transportes:\n");
@@ -304,8 +324,9 @@ public class ACMEAirDrones extends JFrame {
 
     public String alteraSituacao(int codigo, int opcao) {
         if(transportesAlocados.isEmpty() && filaTransporte.getFilaTransporte().isEmpty()) {
-            return "Lista está vazia";
+            return null;
         }
+
         for(Transporte t : transportesAlocados) {
             if (t.getNumero() == codigo) {
                 if(t.getSituacao() == Transporte.Estado.CANCELADO || t.getSituacao() == Transporte.Estado.TERMINADO) {
@@ -318,11 +339,7 @@ public class ACMEAirDrones extends JFrame {
                     case 2: //terminado
                         t.setSituacao(Transporte.Estado.TERMINADO);
                         return "Situacao modificada pra terminado com sucesso \n";
-                    default:
-                        return "Algo deu errado";
                 }
-            }else{
-                return "Esse codigo nao existe";
             }
         }
             for(Transporte transporte : filaTransporte.getFilaTransporte()) {
@@ -333,17 +350,16 @@ public class ACMEAirDrones extends JFrame {
                     switch (opcao) {
                         case 1: //cancelado
                             transporte.setSituacao(Transporte.Estado.CANCELADO);
-                            return "Situacao modificada para cancelado com sucesso \n";
+                            filaTransporte.getFilaTransporte().remove(transporte);
+                            transportesAlocados.add(transporte);
+                            return "Situacao modificada para cancelado com sucesso ";
 
                         case 2: //terminado
-                            transporte.setSituacao(Transporte.Estado.TERMINADO);
-                            return "Situacao modificada pra terminado com sucesso \n";
+                            return "Voce nao pode terminar um tranporte Pendente";
 
-                        default:
-                            return "Algo deu errado";
                     }
                 }else{
-                    return "Esse codigo nao existe"; //nao sei se precisa desse else ou o default ja faz isso
+                    return "Esse codigo nao existe";
                 }
             }
 
