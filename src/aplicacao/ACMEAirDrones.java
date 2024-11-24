@@ -368,7 +368,7 @@ public class ACMEAirDrones extends JFrame {
     }
 
     public boolean listasVazias(){
-        if((transportesAlocados.isEmpty() && filaTransporte.getFilaTransporte().isEmpty()) || listaD.getListaDrones().isEmpty()) {
+        if((transportesAlocados.isEmpty() && filaTransporte.getFilaTransporte().isEmpty()) && listaD.getListaDrones().isEmpty()) {
             return true;
         }
         return false;
@@ -380,6 +380,10 @@ public class ACMEAirDrones extends JFrame {
     }
 
     private void salvarDronesJSON(String nomeArquivo) {
+        if(listaD.getListaDrones().isEmpty()) {
+            return;
+        }
+
         JSONArray dronesArray = new JSONArray();
 
         for (Drone d : listaD.getListaDrones()) {
@@ -393,12 +397,15 @@ public class ACMEAirDrones extends JFrame {
     private void salvarTransportesJSON(String nomeArquivo) {
         JSONArray transportesArray = new JSONArray();
 
-        for (Transporte t : transportesAlocados) {
-            transportesArray.add(criarJSONTransporte(t));
+        if(!transportesAlocados.isEmpty()) {
+            for (Transporte t : transportesAlocados) {
+                transportesArray.add(criarJSONTransporte(t));
+            }
         }
-
-        for (Transporte t : filaTransporte.getFilaTransporte()) {
-            transportesArray.add(criarJSONTransporte(t));
+        if(!listaD.getListaDrones().isEmpty()) {
+            for (Transporte t : filaTransporte.getFilaTransporte()) {
+                transportesArray.add(criarJSONTransporte(t));
+            }
         }
 
         salvarArquivo(nomeArquivo + "-TRANSPORTES.json", transportesArray);
@@ -439,7 +446,10 @@ public class ACMEAirDrones extends JFrame {
         transporte.put("latitude origem", t.getLatitudeOrigem());
         transporte.put("longitude destino", t.getLongitudeDestino());
         transporte.put("latitude destino", t.getLatitudeDestino());
-        transporte.put("drone", criarJSONDrone(t.getDrone()));
+        if(t.getDrone()!=null){
+            transporte.put("drone", criarJSONDrone(t.getDrone()));
+            transporte.put("custo", t.calculaCusto());
+        }
 
         if (t instanceof TransportePessoal) {
             transporte.put("quantidade pessoas", ((TransportePessoal) t).getQtdPessoas());
@@ -450,7 +460,7 @@ public class ACMEAirDrones extends JFrame {
             transporte.put("temperatura minima", ((TransporteCargaViva) t).getTemperaturaMinima());
         }
 
-        transporte.put("custo", t.calculaCusto());
+
         return transporte;
     }
 
