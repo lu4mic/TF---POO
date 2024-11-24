@@ -24,6 +24,14 @@ public class TransporteCargaViva extends Transporte {
         return getDrone().getCustoFixo() * distancia;
     }
 
+    public double getTemperaturaMaxima() {
+        return temperaturaMaxima;
+    }
+
+    public double getTemperaturaMinima() {
+        return temperaturaMinima;
+    }
+
     public String toString(){
         if (this.getDrone() == null) {
             return super.toString() + ", Temperatura Maxima " + temperaturaMaxima + ", Temperatura Minima: " + temperaturaMinima;

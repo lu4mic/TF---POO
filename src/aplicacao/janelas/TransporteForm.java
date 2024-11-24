@@ -181,6 +181,11 @@ public class TransporteForm extends JPanel {
                     if(radioCargaViva.isSelected()){
                         tempMax = Double.parseDouble(textoTempMax.getText());
                         tempMin = Double.parseDouble(textoTempMin.getText());
+
+                        if(tempMax < tempMin){
+                            textoErro.setText("A temperatura maxima deve ser maior do que a minima!");
+                            return;
+                        }
                     }
                     if(radioCargaInanimada.isSelected()){
                         cargaPerigosa = checkBoxCargaPerigosa.isSelected();

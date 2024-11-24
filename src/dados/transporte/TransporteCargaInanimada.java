@@ -18,6 +18,9 @@ public class TransporteCargaInanimada extends Transporte {
         return super.toString() + ", Carga Perigosa: " + cargaPerigosa + " Custo: "+ calculaCusto();
     }
 
+    public boolean isCargaPerigosa() {
+        return cargaPerigosa;
+    }
 
     @Override
     public double calculaCusto() {

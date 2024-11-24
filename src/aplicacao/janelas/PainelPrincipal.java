@@ -71,12 +71,7 @@ public class PainelPrincipal extends JPanel {
                     mensagem = "Nenhum transporte foi procesado";
                 } else mensagem = "Foram processados " + quantidade + " transportes";
 
-                JOptionPane.showMessageDialog(
-                        null,
-                        mensagem,
-                        "Painel de Texto",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
+                JOptionPane.showMessageDialog(null, mensagem, "Processar Transportes", JOptionPane.INFORMATION_MESSAGE);
             }
         });
         botaoMostrarT.addActionListener(new ActionListener() {
@@ -112,5 +107,26 @@ public class PainelPrincipal extends JPanel {
                 }
             }
         });
+        botaoSalvar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (acmeAirDrones.listasVazias()) {
+                    JOptionPane.showMessageDialog(null, "Nenhum transporte ou drone salvos!", "Erro", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    String nomeArquivo = JOptionPane.showInputDialog(null,
+                            "Digite o nome do arquivo para salvar:",
+                            "Salvar como",
+                            JOptionPane.QUESTION_MESSAGE);
+
+                    if (nomeArquivo != null && !nomeArquivo.trim().isEmpty()) {
+                        acmeAirDrones.salvarEmJSON(nomeArquivo.trim());
+                        JOptionPane.showMessageDialog(null, "Salvo com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Nome do arquivo inválido ou cancelado.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+
     }
 }

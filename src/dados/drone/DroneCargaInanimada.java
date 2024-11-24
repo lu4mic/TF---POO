@@ -16,6 +16,10 @@ public class DroneCargaInanimada extends DroneCarga{
         return getCustoFixo() + 5;
     }
 
+    public boolean getProtecao() {
+        return protecao;
+    }
+
     public String toString(){
         return super.toString() + ", Protecao: " + protecao;
     }
