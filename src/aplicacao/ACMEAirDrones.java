@@ -5,9 +5,13 @@ import dados.drone.*;
 import dados.transporte.*;
 
 import javax.swing.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 
 public class ACMEAirDrones extends JFrame {
     private DronesLista listaD = new DronesLista();
@@ -141,9 +145,6 @@ public class ACMEAirDrones extends JFrame {
         listaD.addDrone(dp);
 
         listaD.getListaDrones().sort(Comparator.comparingInt(Drone::getCodigo));
-        for (Drone d : listaD.getListaDrones()) {
-            System.out.println(d.getCodigo());
-        }
         return true;
     }
 
@@ -364,6 +365,119 @@ public class ACMEAirDrones extends JFrame {
             }
 
             return "";
+    }
+
+    public boolean listasVazias(){
+        if((transportesAlocados.isEmpty() && filaTransporte.getFilaTransporte().isEmpty()) && listaD.getListaDrones().isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    public void salvarEmJSON(String nomeArquivo) {
+        salvarDronesJSON(nomeArquivo);
+        salvarTransportesJSON(nomeArquivo);
+    }
+
+    private void salvarDronesJSON(String nomeArquivo) {
+        if(listaD.getListaDrones().isEmpty()) {
+            return;
+        }
+
+        JSONArray dronesArray = new JSONArray();
+
+        for (Drone d : listaD.getListaDrones()) {
+            JSONObject droneJSON = criarJSONDrone(d);
+            dronesArray.add(droneJSON);
+        }
+
+        salvarArquivo(nomeArquivo + "-DRONES.json", dronesArray);
+    }
+
+    private void salvarTransportesJSON(String nomeArquivo) {
+        JSONArray transportesArray = new JSONArray();
+
+        if(!transportesAlocados.isEmpty()) {
+            for (Transporte t : transportesAlocados) {
+                transportesArray.add(criarJSONTransporte(t));
+            }
+        }
+        if(!listaD.getListaDrones().isEmpty()) {
+            for (Transporte t : filaTransporte.getFilaTransporte()) {
+                transportesArray.add(criarJSONTransporte(t));
+            }
+        }
+
+        salvarArquivo(nomeArquivo + "-TRANSPORTES.json", transportesArray);
+    }
+
+    private JSONObject criarJSONDrone(Drone d) {
+        JSONObject drone = new JSONObject();
+        drone.put("codigo", d.getCodigo());
+        drone.put("custo fixo", d.getCustoFixo());
+        drone.put("autonomia", d.getAutonomia());
+
+        if (d instanceof DronePessoal) {
+            drone.put("tipo", 1);
+            drone.put("quantidade maxima de pessoas", ((DronePessoal) d).getQtdMaxPessoas());
+        } else if (d instanceof DroneCargaInanimada) {
+            drone.put("tipo", 2);
+            drone.put("peso maximo", ((DroneCargaInanimada) d).getPesoMaximo());
+            drone.put("protecao", ((DroneCargaInanimada) d).getProtecao());
+        } else if (d instanceof DroneCargaViva) {
+            drone.put("tipo", 3);
+            drone.put("peso maximo", ((DroneCargaViva) d).getPesoMaximo());
+            drone.put("climatizado", ((DroneCargaViva) d).getClimatizado());
+        }
+
+        return drone;
+    }
+
+    private JSONObject criarJSONTransporte(Transporte t) {
+        JSONObject transporte = new JSONObject();
+        transporte.put("tipo", getTipoTransporte(t));
+        transporte.put("numero do transporte", t.getNumero());
+        transporte.put("situacao", t.getSituacao());
+        transporte.put("nome do cliente", t.getNomeCliente());
+        transporte.put("descricao", t.getDescricao());
+        transporte.put("distancia", t.getDistancia());
+        transporte.put("peso", t.getPeso());
+        transporte.put("longitude origem", t.getLongitudeOrigem());
+        transporte.put("latitude origem", t.getLatitudeOrigem());
+        transporte.put("longitude destino", t.getLongitudeDestino());
+        transporte.put("latitude destino", t.getLatitudeDestino());
+        if(t.getDrone()!=null){
+            transporte.put("drone", criarJSONDrone(t.getDrone()));
+            transporte.put("custo", t.calculaCusto());
+        }
+
+        if (t instanceof TransportePessoal) {
+            transporte.put("quantidade pessoas", ((TransportePessoal) t).getQtdPessoas());
+        } else if (t instanceof TransporteCargaInanimada) {
+            transporte.put("carga perigosa", ((TransporteCargaInanimada) t).isCargaPerigosa());
+        } else if (t instanceof TransporteCargaViva) {
+            transporte.put("temperatura maxima", ((TransporteCargaViva) t).getTemperaturaMaxima());
+            transporte.put("temperatura minima", ((TransporteCargaViva) t).getTemperaturaMinima());
+        }
+
+
+        return transporte;
+    }
+
+    private int getTipoTransporte(Transporte t) {
+        if (t instanceof TransportePessoal) return 1;
+        if (t instanceof TransporteCargaInanimada) return 2;
+        if (t instanceof TransporteCargaViva) return 3;
+        return 0;
+    }
+
+    private void salvarArquivo(String caminho, JSONArray dados) {
+        try (FileWriter fw = new FileWriter(caminho)) {
+            fw.write(dados.toJSONString());
+            fw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
