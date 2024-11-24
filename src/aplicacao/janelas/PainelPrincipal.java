@@ -128,5 +128,22 @@ public class PainelPrincipal extends JPanel {
             }
         });
 
+        botaoCarregar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nomeArquivoBase = JOptionPane.showInputDialog(null,
+                        "Digite o nome do arquivo base (sem sufixo):",
+                        "Carregar Arquivo",
+                        JOptionPane.QUESTION_MESSAGE);
+
+                if (nomeArquivoBase != null && !nomeArquivoBase.trim().isEmpty()) {
+                    acmeAirDrones.carregarDronesCSV(nomeArquivoBase);
+                    JOptionPane.showMessageDialog(null, "Arquivo carregado com sucesso!", "Deu certo!", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Nome de arquivo inválido ou cancelado.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
+
 }
