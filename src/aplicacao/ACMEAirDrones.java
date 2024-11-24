@@ -415,18 +415,16 @@ public class ACMEAirDrones extends JFrame {
     private JSONObject criarJSONDrone(Drone d) {
         JSONObject drone = new JSONObject();
         drone.put("codigo", d.getCodigo());
+        drone.put("tipo",getTipoDrone(d));
         drone.put("custo fixo", d.getCustoFixo());
         drone.put("autonomia", d.getAutonomia());
 
         if (d instanceof DronePessoal) {
-            drone.put("tipo", 1);
             drone.put("quantidade maxima de pessoas", ((DronePessoal) d).getQtdMaxPessoas());
         } else if (d instanceof DroneCargaInanimada) {
-            drone.put("tipo", 2);
             drone.put("peso maximo", ((DroneCargaInanimada) d).getPesoMaximo());
             drone.put("protecao", ((DroneCargaInanimada) d).getProtecao());
         } else if (d instanceof DroneCargaViva) {
-            drone.put("tipo", 3);
             drone.put("peso maximo", ((DroneCargaViva) d).getPesoMaximo());
             drone.put("climatizado", ((DroneCargaViva) d).getClimatizado());
         }
@@ -472,6 +470,19 @@ public class ACMEAirDrones extends JFrame {
         return 0;
     }
 
+    private int getTipoDrone(Drone d) {
+        if (d instanceof DronePessoal) {
+            return 1;
+        }
+        if (d instanceof DroneCargaInanimada) {
+            return 2;
+        }
+        if (d instanceof DroneCargaViva) {
+            return 3;
+        }
+        return 0;
+    }
+
     private void salvarArquivo(String caminho, JSONArray dados) {
         try (FileWriter fw = new FileWriter(caminho)) {
             fw.write(dados.toJSONString());
@@ -480,25 +491,21 @@ public class ACMEAirDrones extends JFrame {
             e.printStackTrace();
         }
     }
-    private void carregarArquivo(String nomeArquivoBase) {
+
+    public boolean carregarArquivoSimulacao(String nomeArquivoBase) {
         String nomeArquivoDrones = nomeArquivoBase + "-DRONES.csv";
         String nomeArquivoTransportes = nomeArquivoBase + "-TRANSPORTES.csv";
 
-        File arquivoDrones = new File(nomeArquivoDrones);
-        File arquivoTransportes = new File(nomeArquivoTransportes);
+        boolean dronesCarregados = carregarDronesCSV(nomeArquivoDrones);
+        boolean transportesCarregados = carregarTransportesCSV(nomeArquivoTransportes);
 
-        if (arquivoDrones.exists()) {
-            carregarDronesCSV(nomeArquivoDrones);
-            JOptionPane.showMessageDialog(null, "Arquivo de drones carregado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } else if (arquivoTransportes.exists()) {
-            carregarTransportesCSV(nomeArquivoTransportes);
-            JOptionPane.showMessageDialog(null, "Arquivo de transportes carregado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "Nenhum arquivo de drones ou transportes encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
+        return dronesCarregados && transportesCarregados;
     }
 
-    public void carregarDronesCSV(String nomeArquivo) {
+
+    private boolean carregarDronesCSV(String nomeArquivo) {
+        boolean sucesso = false;
+
         try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
             String linha;
 
@@ -512,34 +519,37 @@ public class ACMEAirDrones extends JFrame {
                 double custoFixo = Double.parseDouble(dados[2].trim());
                 double autonomia = Double.parseDouble(dados[3].trim());
                 double qtdMaxPessoasPesoMaximo = Double.parseDouble(dados[4].trim());
-                boolean protecaoClimatizado = Boolean.parseBoolean(dados[5].trim());
 
                 Drone drone = null;
-                if (tipo == 1) {
+
+                if (tipo == 1) { //Drone pessoal
                     drone = new DronePessoal(codigo, custoFixo, autonomia, (int) qtdMaxPessoasPesoMaximo);
-                } else if (tipo == 2) {
-                    drone = new DroneCargaInanimada(codigo, custoFixo, autonomia, qtdMaxPessoasPesoMaximo, protecaoClimatizado);
-                } else if (tipo == 3) {
-                    drone = new DroneCargaViva(codigo, custoFixo, autonomia, qtdMaxPessoasPesoMaximo, protecaoClimatizado);
+                } else if (tipo == 2) { //Drone carga inanimada
+                    boolean protecao = Boolean.parseBoolean(dados[5].trim());
+                    drone = new DroneCargaInanimada(codigo, custoFixo, autonomia, qtdMaxPessoasPesoMaximo, protecao);
+                } else if (tipo == 3) { //Drone carga viva
+                    boolean climatizado = Boolean.parseBoolean(dados[5].trim());
+                    drone = new DroneCargaViva(codigo, custoFixo, autonomia, qtdMaxPessoasPesoMaximo, climatizado);
                 }
 
                 if (drone != null) {
-                    listaD.getListaDrones().add(drone);
+                    listaD.addDrone(drone);
+                    sucesso = true;
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Erro ao carregar drones do arquivo.", "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (FileNotFoundException e) {
+
+        } catch (IOException | NumberFormatException e) {
+
         }
+
+        return sucesso;
     }
 
 
-    public void carregarTransportesCSV(String nomeArquivo) {
-        File arquivo = new File(nomeArquivo);
-        if (!arquivo.exists()) {
-            JOptionPane.showMessageDialog(null, "O arquivo " + nomeArquivo + " não foi encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    private boolean carregarTransportesCSV(String nomeArquivo) {
+        boolean sucesso = false;
+
         try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
             String linha;
 
@@ -558,45 +568,31 @@ public class ACMEAirDrones extends JFrame {
                 double latDestino = Double.parseDouble(dados[7].trim());
                 double lonDestino = Double.parseDouble(dados[8].trim());
                 String qtdPessoasPerigosaTempMin = dados[9].trim();
-                double tempMax = Double.parseDouble(dados[10].trim());
-
 
                 Transporte t = null;
-                if (tipo.equals("1")) { // transporte Pessoal
-                    try {
-                        int qtdPessoas = Integer.parseInt(qtdPessoasPerigosaTempMin);
-                        t = new TransportePessoal(numero, nomeCliente, descricao, peso, latOrigem, lonOrigem, latDestino, lonDestino, qtdPessoas);
-                    }catch (NumberFormatException e) {
-                        System.out.println("Erro ao converter: " + qtdPessoasPerigosaTempMin);
-                        continue;
-                    }
-                    } else if (tipo.equals("2")) { // transporte de carga Inanimada
-                    try {
-                        boolean cargaPerigosa = Boolean.parseBoolean(qtdPessoasPerigosaTempMin);  // Se a carga é perigosa
-                        t = new TransporteCargaInanimada(numero, nomeCliente, descricao, peso, latOrigem, lonOrigem, latDestino, lonDestino, cargaPerigosa);
-                    } catch (Exception e) {
-                        System.out.println("Erro ao converter : " + qtdPessoasPerigosaTempMin);
-                        continue;
-                    }
-                } else if (tipo.equals("3")) { // transporte de carga viva
-                    try {
-                        double tempMin = Double.parseDouble(qtdPessoasPerigosaTempMin);  // Temperatura mínima
-                        t = new TransporteCargaViva(numero, nomeCliente, descricao, peso, latOrigem, lonOrigem, latDestino, lonDestino, tempMax, tempMin);
-                    } catch (NumberFormatException e) {
-                        System.out.println("Erro ao converter " + qtdPessoasPerigosaTempMin);
-                        continue;
-                    }
-                }
 
+                if (tipo.equals("1")) {
+                    int qtdPessoas = Integer.parseInt(qtdPessoasPerigosaTempMin);
+                    t = new TransportePessoal(numero, nomeCliente, descricao, peso, latOrigem, lonOrigem, latDestino, lonDestino, qtdPessoas);
+                } else if (tipo.equals("2")) {
+                    boolean cargaPerigosa = Boolean.parseBoolean(qtdPessoasPerigosaTempMin);
+                    t = new TransporteCargaInanimada(numero, nomeCliente, descricao, peso, latOrigem, lonOrigem, latDestino, lonDestino, cargaPerigosa);
+                } else if (tipo.equals("3")) {
+                    double tempMin = Double.parseDouble(qtdPessoasPerigosaTempMin);
+                    double tempMax = Double.parseDouble(dados[10].trim());
+                    t = new TransporteCargaViva(numero, nomeCliente, descricao, peso, latOrigem, lonOrigem, latDestino, lonDestino, tempMax, tempMin);
+                }
 
                 if (t != null) {
-                    filaTransporte.getFilaTransporte().add(t);
+                    filaTransporte.addTransporte(t);
+                    sucesso = true;
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Erro ao carregar transportes do arquivo.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+        } catch (FileNotFoundException e) {
 
+        } catch (IOException | NumberFormatException e) {
+
+        }
+        return sucesso;
+    }
 }

@@ -5,6 +5,8 @@ import aplicacao.ACMEAirDrones;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class PainelPrincipal extends JPanel {
     private JPanel painelMenu;
@@ -119,16 +121,16 @@ public class PainelPrincipal extends JPanel {
                             JOptionPane.QUESTION_MESSAGE);
 
                     if (nomeArquivo != null && !nomeArquivo.trim().isEmpty()) {
-                        acmeAirDrones.salvarEmJSON(nomeArquivo.trim());
+                        acmeAirDrones.salvarEmJSON(nomeArquivo.trim().toUpperCase());
                         JOptionPane.showMessageDialog(null, "Salvo com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Nome do arquivo inválido ou cancelado.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Nome do arquivo invalido ou cancelado.", "Erro", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
         });
 
-        botaoCarregar.addActionListener(new ActionListener() {
+        botaoSimulacao.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nomeArquivoBase = JOptionPane.showInputDialog(null,
@@ -137,13 +139,18 @@ public class PainelPrincipal extends JPanel {
                         JOptionPane.QUESTION_MESSAGE);
 
                 if (nomeArquivoBase != null && !nomeArquivoBase.trim().isEmpty()) {
-                    acmeAirDrones.carregarDronesCSV(nomeArquivoBase);
-                    JOptionPane.showMessageDialog(null, "Arquivo carregado com sucesso!", "Deu certo!", JOptionPane.INFORMATION_MESSAGE);
+
+                    if (acmeAirDrones.carregarArquivoSimulacao(nomeArquivoBase.trim())) {
+                        JOptionPane.showMessageDialog(null, "Arquivos carregados com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Nome nao encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Nome de arquivo inválido ou cancelado.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Nome do arquivo invalido!", "Erro", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+
     }
 
 }
