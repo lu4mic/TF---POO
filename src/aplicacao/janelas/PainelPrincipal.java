@@ -138,6 +138,7 @@ public class PainelPrincipal extends JPanel {
 
                     if (acmeAirDrones.carregarArquivoSimulacao(nomeArquivoBase.trim())) {
                         JOptionPane.showMessageDialog(null, "Arquivos carregados com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+                        acmeAirDrones.mudaPainel(7);
                     } else {
                         JOptionPane.showMessageDialog(null, "Nome nao encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
                     }
