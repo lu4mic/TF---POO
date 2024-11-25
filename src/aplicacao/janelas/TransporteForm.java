@@ -158,7 +158,8 @@ public class TransporteForm extends JPanel {
                     textoErro.setText("Todos os campos devem ser preenchidos!");
                 }
                 if (radioCargaViva.isSelected() && (textoTempMax.getText().isBlank() || textoTempMin.getText().isBlank())) {
-                    textoErro.setText("Todos os campos devem ser preenchidos!");
+                    textoTempMax.setText("0");
+                    textoTempMin.setText("0");
                 }
 
                 try{

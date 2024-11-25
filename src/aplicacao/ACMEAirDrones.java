@@ -255,9 +255,10 @@ public class ACMEAirDrones extends JFrame {
             }
         } else if (transporte instanceof TransporteCargaInanimada && drone instanceof DroneCargaInanimada) {
             double pesoNecessario = transporte.getPeso();
+            boolean perigosa =  ((TransporteCargaInanimada) transporte).isCargaPerigosa();
             double capacidadeDrone = ((DroneCargaInanimada) drone).getPesoMaximo();
 
-            if (capacidadeDrone >= pesoNecessario) {
+            if (capacidadeDrone >= pesoNecessario && perigosa == ((DroneCargaInanimada) drone).getProtecao()) {
                 if (candidatoAtual == null || capacidadeDrone < ((DroneCargaInanimada) candidatoAtual).getPesoMaximo()) {
                     return drone; // Escolhe o drone com capacidade mais próxima
                 }
@@ -265,8 +266,11 @@ public class ACMEAirDrones extends JFrame {
         } else if (transporte instanceof TransporteCargaViva && drone instanceof DroneCargaViva) {
             double pesoNecessario = transporte.getPeso();
             double capacidadeDrone = ((DroneCargaViva) drone).getPesoMaximo();
+            boolean climatizado = ((DroneCargaViva) drone).getClimatizado();
+            boolean tempMax0 = ((TransporteCargaViva) transporte).getTemperaturaMaxima() != 0;
+            boolean tempMin0 = ((TransporteCargaViva) transporte).getTemperaturaMinima() != 0;
 
-            if (capacidadeDrone >= pesoNecessario) {
+            if (capacidadeDrone >= pesoNecessario && climatizado == tempMax0 && climatizado == tempMin0) {
                 if (candidatoAtual == null || capacidadeDrone < ((DroneCargaViva) candidatoAtual).getPesoMaximo()) {
                     return drone; // Escolhe o drone com capacidade mais próxima
                 }
