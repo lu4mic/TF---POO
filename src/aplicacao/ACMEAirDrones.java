@@ -500,6 +500,11 @@ public class ACMEAirDrones extends JFrame {
 
     private boolean carregarDronesCSV(String nomeArquivo) {
         boolean sucesso = false;
+        File arquivoTransportes = new File(nomeArquivo.replace("-DRONES", "-TRANSPORTES"));
+        if (!arquivoTransportes.exists()) {
+            return false; //se o arquivo de transportes não existir
+        }
+
 
         try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
             String linha;
@@ -530,10 +535,8 @@ public class ACMEAirDrones extends JFrame {
                 }
 
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException | NumberFormatException e) {
-            e.printStackTrace();
+            return false;
         }
 
         return sucesso;
@@ -543,6 +546,10 @@ public class ACMEAirDrones extends JFrame {
     private boolean carregarTransportesCSV(String nomeArquivo) {
         boolean sucesso = false;
 
+        File arquivoDrones = new File(nomeArquivo.replace("-TRANSPORTES", "-DRONES"));
+        if (!arquivoDrones.exists()) {
+            return false; //falso se não existir os drones
+        }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
             String linha;
@@ -582,10 +589,8 @@ public class ACMEAirDrones extends JFrame {
                     sucesso = true;
                 }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException | NumberFormatException e) {
-            e.printStackTrace();
+            return false;
         }
         return sucesso;
     }
