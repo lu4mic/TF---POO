@@ -112,20 +112,16 @@ public class PainelPrincipal extends JPanel {
         botaoSalvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (acmeAirDrones.listasVazias()) {
-                    JOptionPane.showMessageDialog(null, "Nenhum transporte ou drone salvos!", "Erro", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    String nomeArquivo = JOptionPane.showInputDialog(null,
-                            "Digite o nome do arquivo para salvar:",
-                            "Salvar como",
-                            JOptionPane.QUESTION_MESSAGE);
+                String nomeArquivo = JOptionPane.showInputDialog(null,
+                        "Digite o nome do arquivo para salvar:",
+                        "Salvar como",
+                        JOptionPane.QUESTION_MESSAGE);
 
-                    if (nomeArquivo != null && !nomeArquivo.trim().isEmpty()) {
-                        acmeAirDrones.salvarEmJSON(nomeArquivo.trim().toUpperCase());
-                        JOptionPane.showMessageDialog(null, "Salvo com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Nome do arquivo invalido ou cancelado.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    }
+                if (nomeArquivo != null && !nomeArquivo.trim().isEmpty()) {
+                    acmeAirDrones.salvarEmJSON(nomeArquivo.trim().toUpperCase());
+                    JOptionPane.showMessageDialog(null, "Salvo com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Nome do arquivo invalido ou cancelado.", "Erro", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -134,7 +130,7 @@ public class PainelPrincipal extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nomeArquivoBase = JOptionPane.showInputDialog(null,
-                        "Digite o nome do arquivo base (sem sufixo):",
+                        "Digite o nome do arquivo base:",
                         "Carregar Arquivo",
                         JOptionPane.QUESTION_MESSAGE);
 
@@ -151,6 +147,26 @@ public class PainelPrincipal extends JPanel {
             }
         });
 
+        botaoCarregar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nomeArquivoBase = JOptionPane.showInputDialog(null,
+                        "Digite o nome do arquivo base (sem sufixo):",
+                        "Carregar Arquivo",
+                        JOptionPane.QUESTION_MESSAGE);
+
+                if (nomeArquivoBase != null && !nomeArquivoBase.trim().isEmpty()) {
+
+                    if (acmeAirDrones.carregarJSON(nomeArquivoBase.trim())) {
+                        JOptionPane.showMessageDialog(null, "Arquivos carregados com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Nome nao encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Nome do arquivo invalido!", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
 
 }

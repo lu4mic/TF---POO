@@ -191,7 +191,7 @@ public class TransporteForm extends JPanel {
                         cargaPerigosa = checkBoxCargaPerigosa.isSelected();
                     }
 
-                    if (!acmeAirDrones.CadastraTransporte(numero,nome,descricao,peso,latO,latD,longO,longD,qtdPessoas,cargaPerigosa,tempMax,tempMin)) {
+                    if (!acmeAirDrones.cadastraTransporte(numero,nome,descricao,peso,latO,latD,longO,longD,qtdPessoas,cargaPerigosa,tempMax,tempMin)) {
                         textoErro.setText("Esse codigo já existe!");
                     }
                     else{

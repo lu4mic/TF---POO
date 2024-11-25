@@ -46,7 +46,7 @@ public class DroneCargaForm extends JPanel{
                     boolean climatizacao = climatizacaoCheckBox.isSelected();
                     boolean cargaViva = cargaVivaCheckBox.isSelected();
 
-                    if (!acmeAirDrones.CadastraDrone(codigo, autonomia, custoFixo, pesoMax, protecao, climatizacao, cargaViva)) {
+                    if (!acmeAirDrones.cadastraDrone(codigo, autonomia, custoFixo, pesoMax, protecao, climatizacao, cargaViva)) {
                         textoErro1.setText("Esse codigo já existe!");
                     } else {
                         textoErro1.setText("Drone cadastrado com sucesso!");

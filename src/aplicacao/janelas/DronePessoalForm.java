@@ -82,7 +82,7 @@ public class DronePessoalForm extends JPanel {
                     double autonomia = Double.parseDouble(campoAutonomia.getText());
                     int qtdPessoas = Integer.parseInt(campoQuantidadePessoas.getText());
 
-                    if (acme.CadastraDrone(codigo, custoFixo, autonomia, qtdPessoas)) {
+                    if (acme.cadastraDrone(codigo, custoFixo, autonomia, qtdPessoas)) {
                         areaTexto.setText("Drone cadastrado com sucesso!");
                         botaoMostrarDados.setVisible(true);
                     } else {

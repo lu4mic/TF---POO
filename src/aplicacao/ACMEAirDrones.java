@@ -9,11 +9,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Scanner;
 
-import netscape.javascript.JSObject;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class ACMEAirDrones extends JFrame {
     private DronesLista listaD = new DronesLista();
@@ -96,7 +96,7 @@ public class ACMEAirDrones extends JFrame {
 
     }
 
-    public boolean CadastraDrone(int codigo, double autonomia, double custoFixo, double pesoMax, boolean protecao,
+    public boolean cadastraDrone(int codigo, double autonomia, double custoFixo, double pesoMax, boolean protecao,
                                  boolean climatizacao, boolean cargaViva) {
         int[] codigos = listaD.getListaDrones().stream()
                 .mapToInt(Drone::getCodigo)
@@ -134,7 +134,7 @@ public class ACMEAirDrones extends JFrame {
         return texto.toString();
     }
 
-    public boolean CadastraDrone(int codigo, double custoFixo, double autonomia, int qtdMaxPessoas) {
+    public boolean cadastraDrone(int codigo, double custoFixo, double autonomia, int qtdMaxPessoas) {
         int[] cod = listaD.getListaDrones().stream()
                 .mapToInt(Drone::getCodigo)
                 .toArray();
@@ -164,7 +164,7 @@ public class ACMEAirDrones extends JFrame {
         return mostrarDronesPessoal.toString();
     }
 
-    public boolean CadastraTransporte(int numero, String nome, String descricao, double peso, double latO, double latD, double longO, double longD,
+    public boolean cadastraTransporte(int numero, String nome, String descricao, double peso, double latO, double latD, double longO, double longD,
                                       Integer qtdPessoas, boolean cargaperigosa, Double tempMax, Double tempMin) {
 
         for (Transporte tr : filaTransporte.getFilaTransporte()) {
@@ -368,12 +368,6 @@ public class ACMEAirDrones extends JFrame {
         return "";
     }
 
-    public boolean listasVazias() {
-        if ((transportesAlocados.isEmpty() && filaTransporte.getFilaTransporte().isEmpty()) && listaD.getListaDrones().isEmpty()) {
-            return true;
-        }
-        return false;
-    }
 
     public void salvarEmJSON(String nomeArquivo) {
         salvarDronesJSON(nomeArquivo);
@@ -398,24 +392,21 @@ public class ACMEAirDrones extends JFrame {
     private void salvarTransportesJSON(String nomeArquivo) {
         JSONArray transportesArray = new JSONArray();
 
-        if (!transportesAlocados.isEmpty()) {
-            for (Transporte t : transportesAlocados) {
-                transportesArray.add(criarJSONTransporte(t));
-            }
+        for (Transporte t : transportesAlocados) {
+            transportesArray.add(criarJSONTransporte(t));
         }
-        if (!listaD.getListaDrones().isEmpty()) {
-            for (Transporte t : filaTransporte.getFilaTransporte()) {
-                transportesArray.add(criarJSONTransporte(t));
-            }
+        for (Transporte t : filaTransporte.getFilaTransporte()) {
+            transportesArray.add(criarJSONTransporte(t));
         }
-
-        salvarArquivo(nomeArquivo + "-TRANSPORTES.json", transportesArray);
+        if (!transportesArray.isEmpty()) {
+            salvarArquivo(nomeArquivo + "-TRANSPORTES.json", transportesArray);
+        }
     }
 
     private JSONObject criarJSONDrone(Drone d) {
         JSONObject drone = new JSONObject();
         drone.put("codigo", d.getCodigo());
-        drone.put("tipo",getTipoDrone(d));
+        drone.put("tipo", getTipoDrone(d));
         drone.put("custo fixo", d.getCustoFixo());
         drone.put("autonomia", d.getAutonomia());
 
@@ -436,7 +427,7 @@ public class ACMEAirDrones extends JFrame {
         JSONObject transporte = new JSONObject();
         transporte.put("tipo", getTipoTransporte(t));
         transporte.put("numero do transporte", t.getNumero());
-        transporte.put("situacao", t.getSituacao());
+        transporte.put("situacao", t.getSituacao().toString());
         transporte.put("nome do cliente", t.getNomeCliente());
         transporte.put("descricao", t.getDescricao());
         transporte.put("distancia", t.getDistancia());
@@ -505,6 +496,9 @@ public class ACMEAirDrones extends JFrame {
 
     private boolean carregarDronesCSV(String nomeArquivo) {
         boolean sucesso = false;
+        if (!carregarTransportesCSV(nomeArquivo)) {
+            return false;
+        }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
             String linha;
@@ -520,22 +514,20 @@ public class ACMEAirDrones extends JFrame {
                 double autonomia = Double.parseDouble(dados[3].trim());
                 double qtdMaxPessoasPesoMaximo = Double.parseDouble(dados[4].trim());
 
-                Drone drone = null;
 
                 if (tipo == 1) { //Drone pessoal
-                    drone = new DronePessoal(codigo, custoFixo, autonomia, (int) qtdMaxPessoasPesoMaximo);
+                    cadastraDrone(codigo, custoFixo, autonomia, (int) qtdMaxPessoasPesoMaximo);
+                    sucesso = true;
                 } else if (tipo == 2) { //Drone carga inanimada
                     boolean protecao = Boolean.parseBoolean(dados[5].trim());
-                    drone = new DroneCargaInanimada(codigo, custoFixo, autonomia, qtdMaxPessoasPesoMaximo, protecao);
+                    cadastraDrone(codigo, custoFixo, autonomia, qtdMaxPessoasPesoMaximo, protecao, false, false);
+                    sucesso = true;
                 } else if (tipo == 3) { //Drone carga viva
                     boolean climatizado = Boolean.parseBoolean(dados[5].trim());
-                    drone = new DroneCargaViva(codigo, custoFixo, autonomia, qtdMaxPessoasPesoMaximo, climatizado);
-                }
-
-                if (drone != null) {
-                    listaD.addDrone(drone);
+                    cadastraDrone(codigo, custoFixo, autonomia, qtdMaxPessoasPesoMaximo, false, climatizado, false);
                     sucesso = true;
                 }
+
             }
         } catch (FileNotFoundException e) {
 
@@ -549,6 +541,10 @@ public class ACMEAirDrones extends JFrame {
 
     private boolean carregarTransportesCSV(String nomeArquivo) {
         boolean sucesso = false;
+
+        if (!carregarDronesCSV(nomeArquivo)) {
+            return false;
+        }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
             String linha;
@@ -595,4 +591,144 @@ public class ACMEAirDrones extends JFrame {
         }
         return sucesso;
     }
+
+    public boolean carregarJSON(String nomeArquivoBase) {
+        String nomeArquivoDrones = nomeArquivoBase + "-DRONES.json";
+        String nomeArquivoTransportes = nomeArquivoBase + "-TRANSPORTES.json";
+
+        boolean dronesCarregados = carregarDronesJSON(nomeArquivoDrones);
+        boolean transportesCarregados = carregarTransportesJSON(nomeArquivoTransportes);
+
+        return dronesCarregados && transportesCarregados;
+    }
+
+    public boolean carregarDronesJSON(String nomeArquivo) {
+        JSONParser parser = new JSONParser();
+        try (FileReader reader = new FileReader(nomeArquivo)) {
+            Object obj = parser.parse(reader);
+            JSONArray dronesLista = (JSONArray) obj;
+
+            dronesLista.forEach(drone -> parserDrones((JSONObject) drone));
+            return true;
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void parserDrones(JSONObject droneJSON) {
+        long tipo = (long) droneJSON.get("tipo");
+        int codigo = ((Long) droneJSON.get("codigo")).intValue();
+        double custoFixo = (double) droneJSON.get("custo fixo");
+        double autonomia = (double) droneJSON.get("autonomia");
+
+        if (tipo == 1) {
+            long qtdMaxPessoas = (long) droneJSON.get("quantidade maxima de pessoas");
+            cadastraDrone(codigo, custoFixo, autonomia, (int) qtdMaxPessoas);
+        } else if (tipo == 2) {
+            double peso = (double) droneJSON.get("peso maximo");
+            boolean protecao = (boolean) droneJSON.get("protecao");
+            cadastraDrone(codigo, custoFixo, autonomia, peso, protecao, false, false);
+        } else if (tipo == 3) {
+            double peso = (double) droneJSON.get("peso maximo");
+            boolean climatizado = (boolean) droneJSON.get("climatizado");
+            cadastraDrone(codigo, custoFixo, autonomia, peso, false, climatizado, true);
+        }
+    }
+
+    public void parserTransportes(JSONObject transporteJSON) {
+        int tipo = ((Long) transporteJSON.get("tipo")).intValue();
+        int numero = ((Long) transporteJSON.get("numero do transporte")).intValue();
+        String nomeCliente = (String) transporteJSON.get("nome do cliente");
+        String descricao = (String) transporteJSON.get("descricao");
+        double peso = (double) transporteJSON.get("peso");
+        double latOrigem = (double) transporteJSON.get("latitude origem");
+        double latDestino = (double) transporteJSON.get("latitude destino");
+        double lonOrigem = (double) transporteJSON.get("longitude origem");
+        double lonDestino = (double) transporteJSON.get("longitude destino");
+        String situacao = (String) transporteJSON.get("situacao");
+
+        Transporte t = null;
+
+        //Buscar transporte alocado
+        for (Transporte tr : transportesAlocados) {
+            if (tr.getNumero() == numero) {
+                t = tr;
+                break;
+            }
+        }
+
+        if (t == null) {
+            //criar novo transporte se não existir já
+            if (tipo == 1) {
+                int qtdPessoas = ((Long) transporteJSON.get("quantidade pessoas")).intValue();
+                t = new TransportePessoal(numero, nomeCliente, descricao, peso, latOrigem, lonOrigem, latDestino, lonDestino,qtdPessoas);
+            } else if (tipo == 2) {
+                boolean cargaPerigosa = (boolean) transporteJSON.get("carga perigosa");
+                t = new TransporteCargaInanimada(numero, nomeCliente, descricao, peso, latOrigem, lonOrigem, latDestino, lonDestino,cargaPerigosa);
+            } else if (tipo == 3) {
+                double tempMax = (double) transporteJSON.get("temperatura maxima");
+                double tempMin = (double) transporteJSON.get("temperatura minima");
+                t = new TransporteCargaViva(numero, nomeCliente, descricao, peso, latOrigem, lonOrigem, latDestino, lonDestino,tempMax,tempMin);
+            }
+        }
+
+        if (situacao.equals("PENDENTE")) {
+            t.setSituacao(Transporte.Estado.PENDENTE);
+            filaTransporte.addTransporte(t);
+            return;
+        } else if (situacao.equals("CANCELADO")) {
+            t.setSituacao(Transporte.Estado.CANCELADO);
+        } else if (situacao.equals("TERMINADO")) {
+            t.setSituacao(Transporte.Estado.TERMINADO);
+        } else if (situacao.equals("ALOCADO")) {
+            t.setSituacao(Transporte.Estado.ALOCADO);
+        }
+
+        //ve se o transporte tem um drone
+        if (transporteJSON.containsKey("drone")) {
+            JSONObject droneJSON = (JSONObject) transporteJSON.get("drone");
+            int codigoDrone = ((Long) droneJSON.get("codigo")).intValue();
+
+            Drone drone = listaD.getListaDrones().stream()
+                    .filter(d -> d.getCodigo() == codigoDrone)
+                    .findFirst()
+                    .orElse(null);
+
+            if (drone != null) {
+                t.setDrone(drone);
+            }
+        }
+
+        if (!transportesAlocados.contains(t)) {
+            transportesAlocados.add(t);
+        }
+    }
+
+
+    public boolean carregarTransportesJSON(String nomeArquivo) {
+        //te amo https://youtu.be/6fCNWNc8rcI?si=kyIQaltcrKkzNYzt
+        JSONParser parser = new JSONParser();
+        try (FileReader reader = new FileReader(nomeArquivo)) {
+            BufferedReader br = new BufferedReader(reader);
+            StringBuilder jsonContent = new StringBuilder();
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                jsonContent.append(line);
+            }
+
+            Object obj = parser.parse(new StringReader(jsonContent.toString()));
+            JSONArray transportesLista = (JSONArray) obj;
+
+            transportesLista.forEach(transporte -> parserTransportes((JSONObject) transporte));
+            return true;
+
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }
