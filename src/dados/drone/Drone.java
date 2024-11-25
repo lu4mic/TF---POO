@@ -17,9 +17,6 @@ public abstract class Drone {
         return codigo;
     }
 
-    public void setCount(int count) {
-        this.countT = count;
-    }
     public int getCount() {
         return countT;
     }
