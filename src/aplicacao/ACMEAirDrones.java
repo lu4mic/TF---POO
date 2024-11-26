@@ -602,7 +602,7 @@ public class ACMEAirDrones extends JFrame {
         boolean dronesCarregados = carregarDronesJSON(nomeArquivoDrones);
         boolean transportesCarregados = carregarTransportesJSON(nomeArquivoTransportes);
 
-        return dronesCarregados && transportesCarregados;
+        return dronesCarregados || transportesCarregados;
     }
 
     public boolean carregarDronesJSON(String nomeArquivo) {
@@ -614,7 +614,6 @@ public class ACMEAirDrones extends JFrame {
             dronesLista.forEach(drone -> parserDrones((JSONObject) drone));
             return true;
         } catch (IOException | ParseException e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -728,7 +727,6 @@ public class ACMEAirDrones extends JFrame {
             return true;
 
         } catch (IOException | ParseException e) {
-            e.printStackTrace();
             return false;
         }
     }
