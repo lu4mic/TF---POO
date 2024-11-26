@@ -26,8 +26,8 @@ public class TransporteCargaInanimada extends Transporte {
     public double calculaCusto() {
         double distancia = super.getDistancia();
         if(cargaPerigosa) {
-            return (getDrone().getCustoFixo() * distancia) + 500;
+            return (getDrone().calculaCustoKm() * distancia) + 500;
         }
-        return getDrone().getCustoFixo() * distancia;
+        return getDrone().calculaCustoKm() * distancia;
     }
 }

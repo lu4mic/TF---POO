@@ -10,7 +10,7 @@ public class DronePessoal extends Drone{
 
     @Override
     public double calculaCustoKm() {
-        return getCustoFixo() + 2 * qtdMaxPessoas;
+        return getCustoFixo() + (2 * qtdMaxPessoas);
     }
 
     public int getQtdMaxPessoas() {

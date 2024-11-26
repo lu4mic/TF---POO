@@ -19,9 +19,9 @@ public class TransporteCargaViva extends Transporte {
     public double calculaCusto() {
         double distancia = super.getDistancia();
         if(temperaturaMaxima - temperaturaMinima > 10) {
-            return (getDrone().getCustoFixo() * distancia) + 1000;
+            return (getDrone().calculaCustoKm() * distancia) + 1000;
         }
-        return getDrone().getCustoFixo() * distancia;
+        return getDrone().calculaCustoKm() * distancia;
     }
 
     public double getTemperaturaMaxima() {
