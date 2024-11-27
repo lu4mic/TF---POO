@@ -215,7 +215,7 @@ public class ACMEAirDrones extends JFrame {
 
             for (Drone d : listaD.getListaDrones()) {
                 if (!isDisponivel(d)) {           //drone só pode estar em um transporte
-                    continue;                 //proximo drone
+                    continue;
                 }
                 candidatoFinal = melhorCandidato(first, d, candidatoFinal);
             }
@@ -226,7 +226,7 @@ public class ACMEAirDrones extends JFrame {
             } else {
                 first.setDrone(candidatoFinal);                          //seta o drone no transporte
                 first.setSituacao(Transporte.Estado.ALOCADO);           //seta o transporte como alocado
-                filaTransporte.getFilaTransporte().remove();                //remove da fila de transportes
+                filaTransporte.getFilaTransporte().remove();            //remove da fila de transportes
                 transportesAlocados.add(first);                         // uma nova lista que só tem os alocados, finalizados ou cancelados!
                 count++;
             }
@@ -502,7 +502,7 @@ public class ACMEAirDrones extends JFrame {
         boolean sucesso = false;
         File arquivoTransportes = new File(nomeArquivo.replace("-DRONES", "-TRANSPORTES"));
         if (!arquivoTransportes.exists()) {
-            return false; //se o arquivo de transportes não existir
+            return false; //caso o arquivo de transportes não existir
         }
 
 

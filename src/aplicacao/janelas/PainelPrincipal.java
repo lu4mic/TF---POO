@@ -48,7 +48,7 @@ public class PainelPrincipal extends JPanel {
         });
 
         botaoFinalizar.addActionListener(new ActionListener() {  //terminar Programa,
-            // acho q quando a gente tiver a opcao de salvar, a gente podia verificar se salvou, se não tiver salvo ao tenta//clicar esse botao aparece um pop up se quer salvar ou nao, pra n perder os dados
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
